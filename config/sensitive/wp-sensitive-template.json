@@ -1,0 +1,19 @@
+{
+	"DB_NAME"						:	"db_name",
+	"DB_USER"						:	"db_root",
+	"DB_PASSWORD"					:	"db_root",
+	"DB_HOST"						:	"localhost",
+	"JUNTO_FB_APP_SECRET"			:	"fb_app",
+	"ANGELLIST_OAUTH_CLIENT_TOKEN" 	:	"ANGELLIST_OAUTH_CLIENT_TOKEN",
+	"SAMURAI_MERCHANT_PASSWORD" 	:	"samurai_password",
+	"SAMURAI_PROCESSOR_TOKEN" 		:	"samurai_processor",
+	"AWS_SECRET_ACCESS_KEY" 		: 	"AWS_SECRET_ACCESS_KEY",
+	"AUTH_KEY" 						:	"=<QUwX/x3b}+A2-1.L&|4IIq,V5)&yqbly+6idR(i24VZhzt(vC)cN.T@IRa2eUf",
+	"SECURE_AUTH_KEY" 				: 	"$h+2S f]JJ1B.EPCCr*D}8Qgfnz+|3&?Q#mJ-rE{C98tu{(cms+l)m #pg*`j(SH",
+	"LOGGED_IN_KEY"					:	"_Bz#&,SW(>BM$-[(GW_7rUjgTskcC~9iwXER jC-q@n<BpeE`F-G^@u*Yo4%g+J(",
+	"NONCE_KEY"						:	"zHm&[ubsrO/JIiweDS_%ug:B-+au2vhdKlZlk[>oyNBz#H,q^;ncI-Nt(/yl+$NQ",
+	"AUTH_SALT"						:	"C fYV`>=NGkLMz|7?mG$_1kyEA]l-;iiml_|NUNSl>3@.j>7xl+O.tlt$n?@ )wk",
+	"SECURE_AUTH_SALT"				:	"I*jCt:<<<[ *Jw4*UrVl;9u|O3A}-u]oi/4|kag0kP*SW%dr72^_%,;-eG%-rG(5",
+	"LOGGED_IN_SALT"				:	"owRYw+9lFD;qi05f*+S%kB-nnAQpy3TRxoBms-GUlVfSwCMs8G2PCr-dU)`^DL;E",
+	"NONCE_SALT"					:	"HogU2v6ih9nfa]3-O-SGMA6)<|=@[0ZHynyawet|=K2`v>g!-<$vV1dOwQH.j`%f"
+}
