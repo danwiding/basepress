@@ -1,2 +1,68 @@
-fuel/app/logs/*/*/*
-fuel/app/cache/*/*
+# Mac OS X Finder and whatnot
+.DS_Store
+
+# Sparkle distribution Private Key (Don't check me in!)
+dsa_priv.pem
+
+# XCode (and ancestors) per-user config (very noisy, and not relevant)
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+
+# Generated files
+VersionX-revision.h
+
+# build products
+build/
+*.[oa]
+
+# Other source repository archive directories (protects when importing)
+.hgignore
+.hg
+.svn
+CVS
+
+# automatic backup files
+*~.nib
+*.swp
+*~
+*(Autosaved).rtfd/
+Backup[ ]of[ ]*.pages/
+Backup[ ]of[ ]*.key/
+Backup[ ]of[ ]*.numbers/
+
+#other files
+.ftpquota
+
+#Wordpress Local Files
+wp-config-local.php
+sensitive-local.json
+wordpress/.htaccess
+wordpress/wp-content/uploads/*
+wordpress/wp-content/cache/*
+
+#hides all eclipse files
+.buildpath
+.project
+.settings/
+.idea/
+
+#netbeans settings
+nbproject
+
+#gets rid of the error_log files
+error_log
+wordpress/wp-content/blogs.dir
+backwpup_log
+
+#sensitive files
+deploy-sensitive*.json
+wp-sensitive*.json
+external-configs/scripts/juntowebsitebackup
+
+#ignore the themes as they will be checked in separately
+wordpress/wp-content/themes/*
+wordpress/wp-content/plugins/*

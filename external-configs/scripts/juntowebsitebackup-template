@@ -1,0 +1,19 @@
+#to decrypt the file
+#openssl bf -d -a -salt -in "scheduledDbAndSharedBackup.bf" -out "scheduledDbAndSharedBackup.tgz"
+db_database=""
+db_username=""
+db_password=""
+ftp_username=""
+ftp_password=""
+ftp_server=""
+shared_path=""
+today_date=$(date +"%m_%d_%Y")
+
+#backup database
+mysqldump -u"${db_username}" -p"${db_password}" "${db_database}" > "${shared_path}/scheduledDbBackup.sql"
+#add dbbackup to tar
+tar -g ${shared_path}/scheduledTarIncementalLog.log -zcf "${shared_path}/scheduledDbAndSharedBackup.tgz" "${shared_path}/uploads" "${shared_path}/blogs.dir" "${shared_path}/scheduledDbBackup.sql"
+#encrypt file
+openssl bf -a -salt -in "${shared_path}/scheduledDbAndSharedBackup.tgz" -out "${shared_path}/scheduledDbAndSharedBackup.bf" -pass pass:"${db_password}"
+#send it to ftp
+lftp -u "$ftp_username","$ftp_password" -e "cd \"/remoteftp/juntobackups/production/db-and-shared/scheduled\"; put \"${shared_path}/scheduledDbAndSharedBackup.bf\" -o \"scheduledDbAndSharedBackup${today_date}.bf\"; quit" "$ftp_server"

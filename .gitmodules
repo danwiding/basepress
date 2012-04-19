@@ -1,0 +1,15 @@
+[submodule "lib/samurai-client-php"]
+	path = lib/samurai-client-php
+	url = git@github.com:PolymathicMedia/samurai-client-php.git
+[submodule "lib/oauth2"]
+	path = lib/oauth2
+	url = git@github.com:PolymathicMedia/PHP-OAuth2.git
+[submodule "lib/facebook-php-sdk"]
+	path = lib/facebook-php-sdk
+	url = git@github.com:PolymathicMedia/facebook-php-sdk.git
+[submodule "lib/doctrine2-common"]
+	path = lib/doctrine2-common
+	url = git://github.com/doctrine/common.git
+[submodule "lib/doctrine2-dbal"]
+	path = lib/doctrine2-dbal
+	url = git://github.com/doctrine/dbal.git
