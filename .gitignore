@@ -44,7 +44,6 @@ wordpress/.htaccess
 wordpress/wp-content/uploads/*
 wordpress/wp-content/cache/*
 wordpress/wp-content/upgrade/*
-wordpress/wp-content/plugins
 
 #hides all eclipse files
 .buildpath
@@ -66,5 +65,5 @@ wp-sensitive*.json
 external-configs/scripts/juntowebsitebackup
 
 #ignore the themes as they will be checked in separately
-wordpress/wp-content/themes/*
-wordpress/wp-content/plugins/*
+wordpress/wp-content/themes
+wordpress/wp-content/plugins
