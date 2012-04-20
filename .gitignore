@@ -43,6 +43,7 @@ sensitive-local.json
 wordpress/.htaccess
 wordpress/wp-content/uploads/*
 wordpress/wp-content/cache/*
+wordpress/wp-content/upgrade/*
 
 #hides all eclipse files
 .buildpath
