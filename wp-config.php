@@ -24,19 +24,18 @@
 //set_exception_handler('exception_handler');
 
 $path = dirname(__FILE__);
+$templateDirectory = dirname($path);
+
 define('LIB_PATH', $path . '/lib');
 define('JUNTO_COMMON_PATH', $path . '/junto-common');
 require_once (JUNTO_COMMON_PATH . '/junto_exception_handler.php');
 require_once (JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
-SensitiveConfigLoader($path . "/config/sensitive/wp-sensitive-local.json");
+SensitiveConfigLoader($templateDirectory . "/config/sensitive/wp-sensitive-local.json");
 require_once(JUNTO_COMMON_PATH . '/junto-loader.php');
 
-require_once ($path . '/config/wp-config-local.php');
+require_once ($templateDirectory . '/config/wordpress-app/wp-config-app.php');
+require_once ($templateDirectory . '/config/wordpress-app/wp-config-local.php');
 
-
-
-//set timezone
-date_default_timezone_set('America/Chicago');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -45,16 +44,6 @@ define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
 
 
-
-/**#@-*/
-
-/**
- * WordPress Database Table prefix.
- *
- * You can have multiple installations in one database if you give each a unique
- * prefix. Only numbers, letters, and underscores please!
- */
-$table_prefix  = 'junto_2_0_';
 
 /**
  * WordPress Localized Language, defaults to English.
@@ -68,13 +57,6 @@ define('WPLANG', '');
 
 // debug mode set in wp-locals
 
-//define('WP_ALLOW_MULTISITE', true);
-//define( 'MULTISITE', true );
-//define( 'SUBDOMAIN_INSTALL', true );
-//$base = '/';
-//define( 'PATH_CURRENT_SITE', '/' );
-//define( 'SITE_ID_CURRENT_SITE', 1 );
-//define( 'BLOG_ID_CURRENT_SITE', 1 );
 
 define('WP_POST_REVISIONS', false);											// Turn Off Post Revisions
 define('AUTOSAVE_INTERVAL', 10000);											// Change Auto-Save Interval to 10 min

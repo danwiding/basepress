@@ -16,7 +16,6 @@ define( 'DOMAIN_CURRENT_SITE', $_SERVER['HTTP_HOST'] );
 define('FORCE_SSL_LOGIN', true);
 define('FORCE_SSL_ADMIN', true);
 
-define('JUNTO_FB_FANPAGE', '214331338590757');
 
 /**
  * For developers: WordPress debugging mode.
@@ -26,10 +25,17 @@ define('JUNTO_FB_FANPAGE', '214331338590757');
  * in their development environments.
  */
 define('WP_DEBUG', false);
+$table_prefix  = 'whatever';
+
 
 // used to determine environment from easily accessible constant
+//options are 'dev' 'staging' or 'prod'
 if ( !defined('VIA_ENVIRONMENT') )
 	define('VIA_ENVIRONMENT', 'dev');
 
-define('JUNTO_HOURLY_RATE', 75.00);
-define('IS_JUNTO', true);							// Used to determine if on Junto Network
+						// Used to determine if on Junto Network
+define('WP_ALLOW_MULTISITE', true);
+define( 'MULTISITE', true );
+
+define ('WP_PLUGIN_DIR', dirname(dirname(__DIR__)) . '/plugins');
+//define( 'WPMU_PLUGIN_DIR', dirname(__DIR__) . '/plugins');
