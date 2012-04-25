@@ -19,14 +19,6 @@ ssh_options[:forward_agent] = true
 #decryptedSensitiveJSON = cipher.update(encryptedSensitveJSON64decode)
 #decryptedSensitiveJSON << cipher.final
 #config = JSON.parse(decryptedSensitiveJSON)
-jsonFile = File.open("deploy-sensitive-#{stage}.json")
-config = JSON.parse(jsonFile.read)
-set :ftp_username, config["ftp_username"].to_s
-set :ftp_password, config["ftp_password"].to_s
-set :ftp_server, config["ftp_server"].to_s
-set :db_database, config["#{stage}_db_database"].to_s
-set :db_username, config["#{stage}_db_username"].to_s
-set :db_password, config["#{stage}_db_password"].to_s
 
 namespace :JuntoDeploy do
       task :CreateSharedFolders, :roles => :app do
