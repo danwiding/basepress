@@ -1,4 +1,4 @@
-set :stages, %w(production staging smatchup smatchuphostgator nomidatehostgator)
+set :stages, %w(production staging)
 set :default_stage, "staging"
 require 'capistrano/ext/multistage'
 set :application, "JuntoWebsite"
