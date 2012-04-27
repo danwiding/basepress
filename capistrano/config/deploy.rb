@@ -21,7 +21,9 @@ namespace :JuntoDeploy do
         set :ftp_username, config["ftp_username"].to_s
         set :ftp_password, config["ftp_password"].to_s
         set :ftp_server, config["ftp_server"].to_s
+	 
         ftp = Net::FTP.new("#{ftp_server}","#{ftp_username}","#{ftp_password}")
+	ftp.passive = true 
         ftp.gettextfile("remoteftp/junto/projects/#{application}/sensitiveconfig/wp-sensitive-#{stage}.json", "config/deploy/wp-sensitive-#{stage}.json")
         ftp.close
         wpjsonFile = File.open("config/deploy/wp-sensitive-#{stage}.json")
