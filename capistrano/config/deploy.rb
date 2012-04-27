@@ -43,28 +43,21 @@ namespace :JuntoDeploy do
         set :db_username, wpconfig["DB_USER"].to_s
         set :db_password, wpconfig["DB_PASSWORD"].to_s
     end
-end
 
-namespace :JuntoDeploy do
-      task :CreateSharedFolders, :roles => :app do
-            run "mkdir -p #{shared_path}/uploads"
-            run "mkdir -p #{shared_path}/blogs.dir"
-            run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"mkdir -p /remoteftp/juntobackups/#{application}/#{stage}/db-and-shared/ondeploy;mkdir -p /remoteftp/juntobackups/#{application}/#{stage}/db-and-shared/scheduled; quit\" '#{ftp_server}'"
+    task :CreateSharedFolders, :roles => :app do
+        run "mkdir -p #{shared_path}/uploads"
+        run "mkdir -p #{shared_path}/blogs.dir"
+        run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"mkdir -p /remoteftp/juntobackups/#{application}/#{stage}/db-and-shared/ondeploy;mkdir -p /remoteftp/juntobackups/#{application}/#{stage}/db-and-shared/scheduled; quit\" '#{ftp_server}'"
     end
-end
 
-namespace :JuntoDeploy do
     task :LinkCurrentSharedFolders, :roles => :app do
         run "ln -nfs #{shared_path}/uploads #{release_path}/juntobasepress/wordpress/wp-content/uploads"
         run "ln -nfs #{shared_path}/blogs.dir #{release_path}/juntobasepress/wordpress/wp-content/blogs.dir"
         run "chmod -R 777 #{release_path}"
-	run "ln -nfs #{release_path}/plugins #{release_path}/juntobasepress/wordpress/wp-content/plugins"
-
-	run "ln -nfs #{release_path}/themes #{release_path}/juntobasepress/wordpress/wp-content/themes"
+        run "ln -nfs #{release_path}/plugins #{release_path}/juntobasepress/wordpress/wp-content/plugins"
+        run "ln -nfs #{release_path}/themes #{release_path}/juntobasepress/wordpress/wp-content/themes"
     end
-end
 
-namespace :JuntoDeploy do
     task :SetLocalConfiguration, :roles => :app do
 
         run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"cd /remoteftp/junto/projects/#{application}/sensitiveconfig; get wp-sensitive-#{stage}.json -o #{release_path}/config/sensitive/wp-sensitive-local.json; quit\" '#{ftp_server}'"
@@ -72,9 +65,7 @@ namespace :JuntoDeploy do
         run "cp #{release_path}/config/htaccess/.htaccess-#{stage} #{release_path}/juntobasepress/wordpress/.htaccess"
         run "cp #{release_path}/juntobasepress/external-configs/php-config/php.ini-#{stage} #{release_path}/juntobasepress/wordpress/php.ini"
     end
-end
 
-namespace :JuntoDeploy do
     task :RunDbMigrations, :roles => :app do
         run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php latest"
     end
@@ -99,6 +90,8 @@ namespace(:deploy) do
 end
 
 after "deploy:setup", "JuntoDeploy:CreateSharedFolders"
+before "JuntoDeploy:CreateSharedFolders", "JuntoDeploy:DecryptAndReadConfiguration"
+
 after "deploy:update_code", "JuntoDeploy:DecryptAndReadConfiguration"
 before "deploy:symlink", "JuntoDeploy:LinkCurrentSharedFolders"
 before "deploy:symlink", "JuntoDeploy:SetLocalConfiguration"
