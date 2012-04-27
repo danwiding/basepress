@@ -8,3 +8,6 @@
 	path = lib/facebook-php-sdk
 	url = git@github.com:PolymathicMedia/facebook-php-sdk.git
 
+[submodule "tools/mysql-php-migrations"]
+	path = tools/mysql-php-migrations
+	url = git@github.com:PolymathicMedia/mysql-php-migrations.git
