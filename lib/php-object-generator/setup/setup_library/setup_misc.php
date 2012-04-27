@@ -609,6 +609,7 @@
 			$sql = "CREATE ".$sqlPart[1].";";
 
 			//execute sql
+			echo "$sql \n";
 			$connection = Database::Connect();
 			if (Database::NonQuery($sql, $connection) !== false)
 			{
@@ -818,6 +819,7 @@
 				if ($columnType != '')
 				{
 					$query .= "add column `$add` $columnType,";
+					
 				}
 				else
 				{
@@ -832,7 +834,8 @@
 			}
 			$query = trim($query, ',');
 			//execute query
-
+			$query .= "not null";
+			echo "$query \n";
 			if (Database::NonQuery($query, $connection) !== false)
 			{
 				return true;
