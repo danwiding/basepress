@@ -31,9 +31,9 @@ namespace :JuntoDeploy do
         set :ftp_username, config["ftp_username"].to_s
         set :ftp_password, config["ftp_password"].to_s
         set :ftp_server, config["ftp_server"].to_s
-	 
+
         ftp = Net::FTP.new("#{ftp_server}","#{ftp_username}","#{ftp_password}")
-	ftp.passive = true 
+	ftp.passive = true
         ftp.gettextfile("remoteftp/junto/projects/#{application}/sensitiveconfig/wp-sensitive-#{stage}.json", "config/deploy/wp-sensitive-#{stage}.json")
         ftp.close
         wpjsonFile = File.open("config/deploy/wp-sensitive-#{stage}.json")
@@ -81,13 +81,21 @@ namespace :JuntoDeploy do
 end
 
 namespace(:deploy) do
-  desc "Backup Everything"
-  task :backup, :roles => :app do
-    run "mysqldump -u'#{db_username}' -p'#{db_password}' '#{db_database}' > #{release_path}/dbBackupBeforeDeploy#{release_name}.sql"
-    run "tar zcf #{shared_path}/onDeployDbAndSharedBackup.tgz #{shared_path}/uploads #{shared_path}/blogs.dir #{release_path}/dbBackupBeforeDeploy#{release_name}.sql --strip-components=2"
-    run "openssl bf -a -salt -in #{shared_path}/onDeployDbAndSharedBackup.tgz -out #{shared_path}/onDeployDbAndSharedBackup.bf -pass pass:'#{password}'"
-    run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"cd /remoteftp/juntobackups/#{application}/#{stage}/db-and-shared/ondeploy; put #{shared_path}/onDeployDbAndSharedBackup.bf -o onDeployDbAndSharedBackupBefore#{release_name}.bf; quit\" '#{ftp_server}'"
-  end
+    desc "Backup Everything"
+    task :backup, :roles => :app do
+        run "mysqldump -u'#{db_username}' -p'#{db_password}' '#{db_database}' > #{release_path}/dbBackupBeforeDeploy#{release_name}.sql"
+        run "tar zcf #{shared_path}/onDeployDbAndSharedBackup.tgz #{shared_path}/uploads #{shared_path}/blogs.dir #{release_path}/dbBackupBeforeDeploy#{release_name}.sql --strip-components=2"
+        run "openssl bf -a -salt -in #{shared_path}/onDeployDbAndSharedBackup.tgz -out #{shared_path}/onDeployDbAndSharedBackup.bf -pass pass:'#{password}'"
+        run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"cd /remoteftp/juntobackups/#{application}/#{stage}/db-and-shared/ondeploy; put #{shared_path}/onDeployDbAndSharedBackup.bf -o onDeployDbAndSharedBackupBefore#{release_name}.bf; quit\" '#{ftp_server}'"
+    end
+
+    desc "Initialize the database with migrations"
+    task :InitializeDatabase, :roles => :app do
+        update_code
+        symlink
+        run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php init"
+        run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php build --force"
+    end
 end
 
 after "deploy:setup", "JuntoDeploy:CreateSharedFolders"
@@ -96,4 +104,4 @@ before "deploy:symlink", "JuntoDeploy:LinkCurrentSharedFolders"
 before "deploy:symlink", "JuntoDeploy:SetLocalConfiguration"
 before "deploy:symlink", "deploy:backup"
 after "JuntoDeploy:SetLocalConfiguration", "JuntoDeploy:RunDbMigrations"
-#after "deploy:restart", "deploy:cleanup"
+after "deploy:restart", "deploy:cleanup"
