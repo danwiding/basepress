@@ -1,4 +1,14 @@
 set :stages, %w(production staging)
+
+stages.each do |stage| 
+	
+	if FileTest.exists?("config/deploy/deploy-sensitive-#{stage}.bf")==false
+	 raise " \n *****ERROR***** \n You don't have a #{stage} file at \n config/deploy/deploy-sensitive-#{stage}.bf \n  Try running the basicdevsetup.sh script first \n ***** \n "
+	end 
+end
+
+
+
 set :default_stage, "staging"
 require 'capistrano/ext/multistage'
 
