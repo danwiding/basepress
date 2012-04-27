@@ -2,5 +2,6 @@ require 'railsless-deploy'
 require "rubygems"
 require "openssl"
 require 'json'
-require "base64"
+require 'base64'
+require 'net/ftp'
 load 'config/deploy'
