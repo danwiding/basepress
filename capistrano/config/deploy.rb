@@ -46,6 +46,9 @@ namespace :JuntoDeploy do
         run "ln -nfs #{shared_path}/uploads #{release_path}/juntobasepress/wordpress/wp-content/uploads"
         run "ln -nfs #{shared_path}/blogs.dir #{release_path}/juntobasepress/wordpress/wp-content/blogs.dir"
         run "chmod -R 777 #{release_path}"
+	run "ln -nfs #{release_path}/plugins #{release_path}/juntobasepress/wordpress/wp-content/plugins"
+
+	run "ln -nfs #{release_path}/themes #{release_path}/juntobasepress/wordpress/wp-content/themes"
     end
 end
 
