@@ -1,8 +1,8 @@
 <?php
 $_SERVER['HTTP_HOST'] = 'localhost';
-define('JUNTO_BASE_FOR_MIGRATE', dirname(dirname(MPM_PATH)));
-require_once(JUNTO_BASE_FOR_MIGRATE . '/config/wp-config-local.php');
-require_once(JUNTO_BASE_FOR_MIGRATE . '/junto-common/sensitive-config-loader.php');
+define('JUNTO_BASE_FOR_MIGRATE', dirname(dirname(dirname(MPM_PATH))));
+require_once(JUNTO_BASE_FOR_MIGRATE . '/config/wordpress-app/wp-config-local.php');
+require_once(JUNTO_BASE_FOR_MIGRATE . '/juntobasepress/junto-common/sensitive-config-loader.php');
 SensitiveConfigLoader(JUNTO_BASE_FOR_MIGRATE . '/config/sensitive/wp-sensitive-local.json');
 
 $db_config = (object) array();

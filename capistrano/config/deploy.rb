@@ -13,19 +13,6 @@ set :use_sudo, false
 ssh_options[:forward_agent] = true
 set :keep_releases, 15
 
-
-#sensitiveFile = File.open("deploy-sensitive-#{stage}.bf")
-#encryptedSensitveJSON64encode = sensitiveFile.read
-#encryptedSensitveJSON64decode = Base64.decode64(encryptedSensitveJSON64encode)
-#cipher = OpenSSL::Cipher.new("bf-cbc")
-#cipher.decrypt
-#key = OpenSSL::PKCS5.pbkdf2_hmac_sha1(:password.to_s, OpenSSL::Random.random_bytes(8), 2000, cipher.key_len)
-#cipher.key =key
-##cipher.iv = 0;
-#decryptedSensitiveJSON = cipher.update(encryptedSensitveJSON64decode)
-#decryptedSensitiveJSON << cipher.final
-#config = JSON.parse(decryptedSensitiveJSON)
-
 namespace :JuntoDeploy do
     task :DecryptAndReadConfiguration, :roles => :app do
         run_locally "openssl bf -d -a -p -in config/deploy/deploy-sensitive-#{stage}.bf -out config/deploy/deploy-sensitive-#{stage}.json -pass pass:'#{password}'"
@@ -39,9 +26,10 @@ namespace :JuntoDeploy do
         ftp.close
         wpjsonFile = File.open("config/deploy/wp-sensitive-#{stage}.json")
         wpconfig = JSON.parse(wpjsonFile.read)
-        set :db_database, config["DB_NAME"].to_s
-        set :db_username, config["DB_USER"].to_s
-        set :db_password, config["DB_PASSWORD"].to_s
+        File.delete("config/deploy/wp-sensitive-#{stage}.json")
+        set :db_database, wpconfig["DB_NAME"].to_s
+        set :db_username, wpconfig["DB_USER"].to_s
+        set :db_password, wpconfig["DB_PASSWORD"].to_s
     end
 end
 
