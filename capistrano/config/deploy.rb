@@ -90,10 +90,10 @@ namespace(:deploy) do
     end
 
     desc "Initialize the database with migrations"
-    task :InitializeDatabase, :roles => :app do
+    task :InitializeServer, :roles => :app do
+        setup
         update_code
         symlink
-        run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php init"
         run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php build --force"
     end
 end
