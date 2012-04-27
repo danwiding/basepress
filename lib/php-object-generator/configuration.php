@@ -1,7 +1,7 @@
 <?php
 
 define('JUNTO_BASE_FOR_POG', dirname(dirname(dirname(__FILE__))));
-require_once(JUNTO_BASE_FOR_POG . '/config/wp-config-local.php');
+require_once(JUNTO_BASE_FOR_POG . '/config/wordpress-app/wp-config-local.php');
 require_once(JUNTO_BASE_FOR_POG . '/junto-common/sensitive-config-loader.php');
 SensitiveConfigLoader(JUNTO_BASE_FOR_POG . '/config/sensitive/wp-sensitive-local.json');
 
