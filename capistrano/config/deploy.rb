@@ -2,7 +2,7 @@ set :stages, %w(production staging)
 
 stages.each do |stage| 
 	
-	if FileTest.exists?("config/deploy/deploy-sensitive-#{stage}.bf")==false
+	if !FileTest.exists?("config/deploy/deploy-sensitive-#{stage}.bf")
 	 raise " \n *****ERROR***** \n You don't have a #{stage} file at \n config/deploy/deploy-sensitive-#{stage}.bf \n  Try running the basicdevsetup.sh script first \n ***** \n "
 	end 
 end
@@ -12,13 +12,12 @@ end
 set :default_stage, "staging"
 require 'capistrano/ext/multistage'
 
-#set(:thestage) { "#{stage}" }
-#sensitiveFile = File.open("deploy/deploy-sensitive-#{thestage}.bf")
 set :scm, :git
 set :deploy_via, :remote_cache
 set :copy_exclude, [".hg", ".DS_Store", ".hgignore"]
 set :git_enable_submodules,1
 set :use_sudo, false
+
 #forwards ssh keys from local machine
 ssh_options[:forward_agent] = true
 set :keep_releases, 15
@@ -97,4 +96,4 @@ before "deploy:symlink", "JuntoDeploy:LinkCurrentSharedFolders"
 before "deploy:symlink", "JuntoDeploy:SetLocalConfiguration"
 before "deploy:symlink", "deploy:backup"
 after "JuntoDeploy:SetLocalConfiguration", "JuntoDeploy:RunDbMigrations"
-after "deploy:restart", "deploy:cleanup"
+after "deploy:symlink", "deploy:cleanup"
