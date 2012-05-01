@@ -70,3 +70,6 @@ wordpress/wp-content/plugins
 
 #ignore capistrano theme specific info
 capistrano/config/deploy
+
+#ignore junto-content which is a symlink
+wordpress/wp-content/junto-content
