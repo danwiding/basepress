@@ -25,7 +25,7 @@ function add_another_section($sections){
 				'desc' => __('<p class="description">This is a section created by adding a filter to the sections array, great to allow child themes, to add/remove sections from the options.</p>', 'nhp-opts'),
 				//all the glyphicons are included in the options folder, so you can hook into them, or link to your own custom ones.
 				//You dont have to though, leave it blank for default.
-				'icon' => trailingslashit(get_template_directory_uri()).'theme-options/img/glyphicons/glyphicons_062_attach.png',
+				'icon' => 'junto-common/theme-options/img/glyphicons/glyphicons_062_attach.png',
 				//Lets leave this as a blank section, no options just some intro text set above.
 				'fields' => array()
 				);
