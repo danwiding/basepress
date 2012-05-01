@@ -39,6 +39,21 @@ class junto_loader{
         }
     }
 
+    /**
+     * @static
+     */
+    public static function loadJuntoFunctions(){
+        require_once("junto-misc-functions/default.php");
+    }
+
+
+    /**
+     * @static
+     */
+    public static function loadCustomThemeOptions(){
+        require_once("junto-misc-functions/theme-options.php");
+    }
+
 }
 
 /**
