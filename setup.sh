@@ -7,11 +7,13 @@ ln -nfs ${THEMEDIR}/themes ${THEMEDIR}/juntobasepress/wordpress/wp-content/theme
 mkdir ${THEMEDIR}/juntobasepress/wordpress/wp-content/blogs.dir
 mkdir ${THEMEDIR}/juntobasepress/wordpress/wp-content/uploads
 
-for filename in ${THEMEDIR}/subthemes/*
-do
-    for themedirectory in ${filename}/themes/*
+if [ -d "$DIRECTORY" ]; then
+    for filename in ${THEMEDIR}/subthemes/*
     do
-        ln -nfs ${themedirectory} ${THEMEDIR}/themes/$(basename ${themedirectory})
+        for themedirectory in ${filename}/themes/*
+        do
+            ln -nfs ${themedirectory} ${THEMEDIR}/themes/$(basename ${themedirectory})
+        done;
     done;
-done;
+fi
 
