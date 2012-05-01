@@ -5,7 +5,7 @@
  *
  */
 if(!class_exists('NHP_Options')){
-	require_once( dirname( __FILE__ ) . '/theme-options/options.php' );
+	require_once( dirname( __FILE__ ) . '/../junto-content/theme-options/options.php' );
 }
 
 /*
@@ -95,35 +95,35 @@ $args['share_icons']['linked_in'] = array(
 //$args['show_import_export'] = false;
 
 //Choose a custom option name for your theme options, the default is the theme name in lowercase with spaces replaced by underscores
-$args['opt_name'] = 'twenty_eleven';
+$args['opt_name'] = 'junto';
 
 //Custom menu icon
-//$args['menu_icon'] = '';
+// $args['menu_icon'] = '';
 
 //Custom menu title for options page - default is "Options"
-$args['menu_title'] = __('Theme Options', 'nhp-opts');
+$args['menu_title'] = __('Junto Options', 'nhp-opts');
 
 //Custom Page Title for options page - default is "Options"
-$args['page_title'] = __('Twenty Eleven Theme Options', 'nhp-opts');
+$args['page_title'] = __('Junto Theme Options', 'nhp-opts');
 
 //Custom page slug for options page (wp-admin/themes.php?page=***) - default is "nhp_theme_options"
 $args['page_slug'] = 'theme_options';
 
 //Custom page capability - default is set to "manage_options"
-//$args['page_cap'] = 'manage_options';
+// $args['page_cap'] = 'manage_options';
 
 //page type - "menu" (adds a top menu section) or "submenu" (adds a submenu) - default is set to "menu"
-//$args['page_type'] = 'submenu';
+// $args['page_type'] = 'submenu';
 
 //parent menu - default is set to "themes.php" (Appearance)
 //the list of available parent menus is available here: http://codex.wordpress.org/Function_Reference/add_submenu_page#Parameters
-//$args['page_parent'] = 'themes.php';
+// $args['page_parent'] = 'themes.php';
 
 //custom page location - default 100 - must be unique or will override other items
-//$args['page_position'] = 10;
+// $args['page_position'] = 10;
 
 //Custom page icon class (used to override the page icon next to heading)
-//$args['page_icon'] = 'icon-themes';
+// $args['page_icon'] = 'icon-themes';
 		
 //Set ANY custom page help tabs - displayed using the new help tab API, show in order of definition		
 $args['help_tabs'][] = array(
@@ -144,6 +144,41 @@ $args['help_sidebar'] = __('<p>This is the sidebar content, HTML is allowed.</p>
 
 $sections = array();
 
+$sections[] = array(
+		'title'		=>	'Global Options',
+		'desc'		=>	'<p class="description">Here\'s all the theme options you can store.</p>',
+		'icon'		=>	NHP_OPTIONS_URL.'img/glyphicons/glyphicons_023_cogwheels.png',
+		'fields'	=>	array(
+			array(
+				'id' 		=>	'1',
+				'type' 		=>	'text',
+				'title' 	=>	'Twitter Link',
+				'desc'		=>	'Your Twitter URL',
+				'std'		=>	'http://www.twitter.com/',
+				'validate'	=>	'url',
+				'class'		=>	'no-top-border',
+			),
+			array(
+				'id' 		=>	'2',
+				'type' 		=>	'text',
+				'title' 	=>	'Facebook Link',
+				'desc'		=>	'Your Facebook URL',
+				'std'		=>	'http://www.facebook.com/',
+				'validate'	=>	'url',
+				'class'		=>	'no-top-border',
+			),
+			array(
+				'id' 		=>	'3',
+				'type' 		=>	'text',
+				'title' 	=>	'LinkedIn Link',
+				'desc'		=>	'Your LinkedIn URL',
+				'std'		=>	'http://www.linkedin.com/',
+				'validate'	=>	'url',
+				'class'		=>	'no-top-border',
+			),
+		)	
+	);
+/*
 $sections[] = array(
 				'title' => __('Getting Started', 'nhp-opts'),
 				'desc' => __('<p class="description">This is the description field for the Section. HTML is allowed</p>', 'nhp-opts'),
@@ -586,7 +621,7 @@ $sections[] = array(
 						)				
 					)
 				);
-				
+*/				
 				
 	$tabs = array();
 	
@@ -598,8 +633,6 @@ $sections[] = array(
 	$theme_info .= '<p class="nhp-opts-theme-data description theme-description">'.$theme_data['Description'].'</p>';
 	$theme_info .= '<p class="nhp-opts-theme-data description theme-tags">'.__('<strong>Tags:</strong> ', 'nhp-opts').implode(', ', $theme_data['Tags']).'</p>';
 	$theme_info .= '</div>';
-	
-	
 	
 	$tabs['theme_info'] = array(
 					'icon' => NHP_OPTIONS_URL.'img/glyphicons/glyphicons_195_circle_info.png',

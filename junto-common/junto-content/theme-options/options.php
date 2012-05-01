@@ -4,11 +4,11 @@ if ( ! class_exists('NHP_Options') ){
 	if(!defined('NHP_OPTIONS_DIR')){
 		define('NHP_OPTIONS_DIR', trailingslashit(dirname(__FILE__)));
 	}
-	
+		
 	if(!defined('NHP_OPTIONS_URL')){
-		define('NHP_OPTIONS_URL', site_url(str_replace(ABSPATH, '', trailingslashit(dirname(__FILE__)))));
+		define('NHP_OPTIONS_URL', site_url(trailingslashit('/wp-content/junto-content/theme-options')));
 	}
-	
+		
 class NHP_Options{
 	
 	public $framework_url = 'http://leemason.github.com/NHP-Theme-Options-Framework/';
