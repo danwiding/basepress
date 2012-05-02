@@ -1,5 +1,12 @@
 <?php 	//	BASELINE POLYMATHIC FUNCTIONS
 
+//**********     Include View File     **********//
+	
+	function views($include, $once = false){
+		$uri = POLY_THEME_PATH.'/'.get_option('template');
+		return ($once ? include_once($uri.'/__views/'.$include) : include($uri.'/__views/'.$include));
+	}
+
 //**********     Print Nice     **********//
 	
 	function print_nice($var, $dump = false){
