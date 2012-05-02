@@ -62,7 +62,7 @@ class junto_loader{
      * @param int $authorId the author to associate or null which will get the current id
      * @return int|WP_Error the id of the page
      */
-    public static function CreatePageOnThemeActivation($pageName, $templateFileName, $pageContent = '', $authorId=null){
+    public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $authorId=null, array $postMeta = array()){
         if (isset($_GET['activated']) && is_admin()){
 
 
@@ -80,6 +80,9 @@ class junto_loader{
                 $new_page_id = wp_insert_post($new_page);
                 if(!empty($templateFileName)){
                     update_post_meta($new_page_id, '_wp_page_template', $templateFileName);
+                }
+                foreach ($postMeta as $postMetaKey => $postMetaValue){
+                    update_post_meta($new_page_id, $postMetaKey, $postMetaValue);
                 }
             }
             return $new_page_id;
