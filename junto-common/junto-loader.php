@@ -54,6 +54,39 @@ class junto_loader{
         require_once("junto-misc-functions/theme-options.php");
     }
 
+    /**
+     * @static Creates a theme when the theme is activated
+     * @param string $pageName Name of the page and it's associated url
+     * @param string $templateFileName Name of the file that contains the template
+     * @param string $pageContent content of the file
+     * @param int $authorId the author to associate or null which will get the current id
+     * @return int|WP_Error the id of the page
+     */
+    public static function CreatePageOnThemeActivation($pageName, $templateFileName, $pageContent = '', $authorId=null){
+        if (isset($_GET['activated']) && is_admin()){
+
+
+            //don't change the code bellow, unless you know what you're doing
+
+            $page_check = get_page_by_title($pageName);
+            $new_page = array(
+                'post_type' => 'page',
+                'post_title' => $pageName,
+                'post_content' => $pageContent,
+                'post_status' => 'publish',
+                'post_author' => $authorId ? $authorId : get_current_user_id(),
+            );
+            if(!isset($page_check->ID)){
+                $new_page_id = wp_insert_post($new_page);
+                if(!empty($templateFileName)){
+                    update_post_meta($new_page_id, '_wp_page_template', $templateFileName);
+                }
+            }
+            return $new_page_id;
+
+        }
+    }
+
 }
 
 /**
