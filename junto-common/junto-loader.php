@@ -60,6 +60,7 @@ class junto_loader{
      * @param string $templateFileName Name of the file that contains the template
      * @param string $pageContent content of the file
      * @param int $authorId the author to associate or null which will get the current id
+     * @param array $postMeta An array of postMeta keys and values
      * @return int|WP_Error the id of the page
      */
     public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $authorId=null, array $postMeta = array()){
