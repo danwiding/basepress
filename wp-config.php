@@ -36,7 +36,6 @@ require_once(JUNTO_COMMON_PATH . '/junto-loader.php');
 require_once ($templateDirectory . '/config/wordpress-app/wp-config-app.php');
 require_once ($templateDirectory . '/config/wordpress-app/wp-config-local.php');
 
-
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
 
@@ -61,7 +60,6 @@ define('WPLANG', '');
 define('WP_POST_REVISIONS', false);											// Turn Off Post Revisions
 define('AUTOSAVE_INTERVAL', 10000);											// Change Auto-Save Interval to 10 min
 
-
 /* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */
@@ -72,3 +70,4 @@ if ( !defined('ABSPATH') )
 /** Sets up WordPress vars and included files. */
 //if (!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING != 'On')
 require_once(ABSPATH . 'wp-settings.php');
+require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
