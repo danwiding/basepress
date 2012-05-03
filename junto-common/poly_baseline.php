@@ -7,6 +7,20 @@
 		return ($once ? include_once($uri.'/__views/'.$include) : include($uri.'/__views/'.$include));
 	}
 
+//**********     Force SSL     **********//
+
+	function force_ssl(){
+		if (!is_ssl() && defined('VIA_ENVIRONMENT') && VIA_ENVIRONMENT == 'prod'){
+			if (0 === strpos($_SERVER['REQUEST_URI'], 'http')):
+				wp_redirect(preg_replace('|^http://|', 'https://', $_SERVER['REQUEST_URI']));
+				exit();
+			else:
+				wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+				exit();
+			endif;
+		}
+	}
+
 //**********     Print Nice     **********//
 	
 	function print_nice($var, $dump = false){
