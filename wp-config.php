@@ -26,6 +26,7 @@
 $path = dirname(__FILE__);
 $templateDirectory = dirname($path);
 
+define('REPO_PATH', $path);
 define('LIB_PATH', $path . '/lib');
 define('JUNTO_COMMON_PATH', $path . '/junto-common');
 define('POLY_THEME_PATH', $templateDirectory . '/themes');
