@@ -10,17 +10,21 @@
 class junto_loader{
     /**
      * @static
-     * @param $filepath
+     * @param $filePath
      */
-    public static function LoadJuntoMVC($filepath=null){
-        require_once("junto-framework/junto-controller.php");
-        require_once("junto-framework/junto-view.php");
-        require_once("junto-framework/junto-model.php");
+    public static function LoadJuntoMVC($filePath=null){
+        foreach (glob(JUNTO_COMMON_PATH . "/junto-framework/*.php") as $fileName)
+        {
+            require_once $fileName;
+        }
+
         require_once(LIB_PATH . "/php-object-generator/configuration.php");
         require_once(LIB_PATH . "/php-object-generator/objects/class.database.php");
         require_once(LIB_PATH . "/php-object-generator/objects/class.pog_base.php");
-        if ($filepath!=null){
-            new ThemeMvcClassLoader($filepath);
+        add_filter( 'show_admin_bar', '__return_false' );
+//        require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
+        if ($filePath!=null){
+            new ThemeMvcClassLoader($filePath);
         }
     }
 
@@ -100,7 +104,7 @@ class ThemeMvcClassLoader{
     /**
      * @the full file path to the theme
      */
-    protected $filepath;
+    protected $filePath;
 
     /**
      * @var null
@@ -109,45 +113,45 @@ class ThemeMvcClassLoader{
 
     /**
      * Constructs and registers the loader no other function required
-     * @param $filepath full file path to the theme path
-     * @param null $predefinedClasses any classes and their associated relativepaths from the $filepath or from root
+     * @param $filePath full file path to the theme path
+     * @param null $predefinedClasses any classes and their associated relativepaths from the $filePath or from root
      */
-    public function __construct($filepath, $predefinedClasses=null){
-        $this->filepath = $filepath;
+    public function __construct($filePath, $predefinedClasses=array()){
+        $this->filePath = $filePath;
         $this->classToPathArray = $predefinedClasses;
         spl_autoload_register(array($this, 'ThemeMVCAutoloader'));
     }
 
     /**
      * This function gets passed to spl_autoload_register
-     * @param $classname
+     * @param $className
      * @return bool success or fail
      */
-    private function ThemeMVCAutoloader($classname){
-        if(key_exists($classname,$this->classToPathArray)){
-            if ($this->classToPathArray[$classname][0]=='/')
-                require ($this->classToPathArray[$classname]);
+    private function ThemeMVCAutoloader($className){
+        if(array_key_exists($className,$this->classToPathArray)){
+            if ($this->classToPathArray[$className][0]=='/')
+                require ($this->classToPathArray[$className]);
             else
-                require ($this->filepath . $this->classToPathArray[$classname]);
+                require ($this->filePath . $this->classToPathArray[$className]);
             return true;
         }
-        $requirepath = $this->filepath;
-        if(stristr($classname, "controller"))
-            $requirepath.="/__controllers";
-        else if(stristr($classname, "model"))
-            $requirepath.="/__models";
-        else if(stristr($classname, "class."))
-            $requirepath.="/__models/class.";
-        else if(stristr($classname, "view"))
-            $requirepath.="/__views";
-        if(strcasecmp(substr($classname,0,4), 'mock')==0)
-            $requirepath.="/mockobjects";
-        $requirepath.= "/{$classname}.php";
-        if(file_exists($requirepath)){
-            require $requirepath;
+        $requirePath = $this->filePath;
+        if(stristr($className, "controller"))
+            $requirePath.="/__controllers";
+        else if(stristr($className, "model"))
+            $requirePath.="/__models";
+        else if(stristr($className, "class."))
+            $requirePath.="/__models/class.";
+        else if(stristr($className, "view"))
+            $requirePath.="/__views";
+        if(strcasecmp(substr($className,0,4), 'mock')==0)
+            $requirePath.="/mockobjects";
+        $requirePath.= "/{$className}.php";
+        if(file_exists($requirePath)){
+            require $requirePath;
             return true;
         }
-        $files = glob("{$this->filepath}/*/{$classname}.php");
+        $files = glob("{$this->filePath}/*/{$className}.php");
         foreach($files as $file){
             require $file;
             if (next($files)===false)

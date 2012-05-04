@@ -71,4 +71,4 @@ if ( !defined('ABSPATH') )
 /** Sets up WordPress vars and included files. */
 //if (!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING != 'On')
 require_once(ABSPATH . 'wp-settings.php');
-require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
+//require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
