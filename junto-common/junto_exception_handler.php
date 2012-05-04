@@ -60,8 +60,8 @@ function log_friendly_exception(exception $exception){
 
 
 
-set_exception_handler('log_friendly_exception');
-set_error_handler('log_friendly_exception');
+//set_exception_handler('log_friendly_exception');
+//set_error_handler('log_friendly_exception');
 
 
 //throw new exception("WHY SO SERIOUS?!");
