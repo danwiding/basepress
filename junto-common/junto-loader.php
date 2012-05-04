@@ -133,13 +133,13 @@ class ThemeMvcClassLoader{
         }
         $requirepath = $this->filepath;
         if(stristr($classname, "controller"))
-            $requirepath.="/controllers";
+            $requirepath.="/__controllers";
         else if(stristr($classname, "model"))
-            $requirepath.="/models";
+            $requirepath.="/__models";
         else if(stristr($classname, "class."))
-            $requirepath.="/models/class.";
+            $requirepath.="/__models/class.";
         else if(stristr($classname, "view"))
-            $requirepath.="/views";
+            $requirepath.="/__views";
         if(strcasecmp(substr($classname,0,4), 'mock')==0)
             $requirepath.="/mockobjects";
         $requirepath.= "/{$classname}.php";
