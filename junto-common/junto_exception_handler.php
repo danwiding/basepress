@@ -1,28 +1,5 @@
 <?php
-include('php/log4php/Logger.php');
 
-Logger::configure(array(
-		'rootLogger' => array(
-				'appenders' => array('default'),
-			),
-			'appenders' => array(
-					'default' => array(
-							'class' => 'LoggerAppenderConsole',
-							'layout' => array(
-									'class' => 'LoggerLayoutSimple')
-							)
-					)
-		));
-
-
-$log = Logger::getLogger('myLogger');
-
-$log->trace("My first message.");   // Not logged because TRACE < WARN
-$log->debug("My second message.");  // Not logged because DEBUG < WARN
-$log->info("My third message.");    // Not logged because INFO < WARN
-$log->warn("My fourth message.");   // Logged because WARN >= WARN
-$log->error("My fifth message.");   // Logged because ERROR >= WARN
-$log->fatal("My sixth message.");   // Logged because FATAL >= WARN
 
 function log_friendly_exception(exception $exception){
 	if(defined("LOG_PATH")){
