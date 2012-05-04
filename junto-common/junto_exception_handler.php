@@ -1,5 +1,5 @@
 <?php
-include('log4php/Logger.php');
+include('php/log4php/Logger.php');
 
 Logger::configure(array(
 		'rootLogger' => array(
