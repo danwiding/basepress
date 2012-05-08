@@ -67,20 +67,21 @@ class junto_loader{
      * @param array $postMeta An array of postMeta keys and values
      * @return int|WP_Error the id of the page
      */
-    public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $authorId=null, array $postMeta = array()){
+    public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $post_parent = 0, $authorId=null, array $postMeta = array(), array $otherPageKeys = array()){
         if (isset($_GET['activated']) && is_admin()){
 
 
             //don't change the code bellow, unless you know what you're doing
 
             $page_check = get_page_by_title($pageName);
-            $new_page = array(
+            $new_page = array_merge( $otherPageKeys, array(
                 'post_type' => 'page',
                 'post_title' => $pageName,
                 'post_content' => $pageContent,
                 'post_status' => 'publish',
                 'post_author' => $authorId ? $authorId : get_current_user_id(),
-            );
+                'post_parent' => $$post_parent
+            ));
             if(!isset($page_check->ID)){
                 $new_page_id = wp_insert_post($new_page);
                 if(!empty($templateFileName)){
