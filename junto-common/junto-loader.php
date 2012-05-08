@@ -73,16 +73,19 @@ class junto_loader{
 
             //don't change the code bellow, unless you know what you're doing
 
-            $page_check = get_page_by_title($pageName);
+            $page_check = get_page_by_path($post_parent ? "${post_parent}/${pageName}" : $pageName);
             $new_page = array_merge( $otherPageKeys, array(
                 'post_type' => 'page',
                 'post_title' => $pageName,
                 'post_content' => $pageContent,
                 'post_status' => 'publish',
                 'post_author' => $authorId ? $authorId : get_current_user_id(),
-                'post_parent' => $$post_parent
+                'post_parent' => $post_parent
             ));
-            if(!isset($page_check->ID)){
+            if(isset($page_check->ID)){
+                return null;
+            }
+            else{
                 $new_page_id = wp_insert_post($new_page);
                 if(!empty($templateFileName)){
                     update_post_meta($new_page_id, '_wp_page_template', $templateFileName);
@@ -90,9 +93,8 @@ class junto_loader{
                 foreach ($postMeta as $postMetaKey => $postMetaValue){
                     update_post_meta($new_page_id, $postMetaKey, $postMetaValue);
                 }
+                return $new_page_id;
             }
-            return $new_page_id;
-
         }
     }
 
