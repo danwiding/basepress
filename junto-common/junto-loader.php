@@ -8,13 +8,14 @@
  */
 
 class junto_loader{
+
+
     /**
      * @static
      * @param $filePath
      */
     public static function LoadJuntoMVC($filePath=null){
-        foreach (glob(JUNTO_COMMON_PATH . "/junto-framework/*.php") as $fileName)
-        {
+        foreach (glob(JUNTO_COMMON_PATH . "/junto-framework/*.php") as $fileName){
             require_once $fileName;
         }
 
