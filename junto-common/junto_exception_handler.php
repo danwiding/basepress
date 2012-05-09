@@ -21,7 +21,7 @@ function log_friendly_exception(exception $exception){
 		error_log($msg,3,ERRLOG_PATH);
 	
 			
-	}
+	
 	
 	
 	if (VIA_ENVIRONMENT != 'prod') {
@@ -32,7 +32,8 @@ function log_friendly_exception(exception $exception){
 		echo htmlentities("Placeholder error for production (staging and dev get full readout)");
 	}
 	
-
+	
+}
 
 function my_Error_Handler($errno, $errstr, $errfile, $errline)
 {
@@ -65,9 +66,8 @@ function var_error_handler($output)
 }
 
 
-ob_start('var_error_handler');
+//ob_start('var_error_handler');
 
 set_exception_handler('log_friendly_exception');
 set_error_handler('my_error_handler');
 
-throw new exception("THIS SHOULDN'T RUN!");
