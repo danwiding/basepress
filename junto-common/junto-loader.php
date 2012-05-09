@@ -8,13 +8,14 @@
  */
 
 class junto_loader{
+
+
     /**
      * @static
      * @param $filePath
      */
     public static function LoadJuntoMVC($filePath=null){
-        foreach (glob(JUNTO_COMMON_PATH . "/junto-framework/*.php") as $fileName)
-        {
+        foreach (glob(JUNTO_COMMON_PATH . "/junto-framework/*.php") as $fileName){
             require_once $fileName;
         }
 
@@ -67,21 +68,25 @@ class junto_loader{
      * @param array $postMeta An array of postMeta keys and values
      * @return int|WP_Error the id of the page
      */
-    public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $authorId=null, array $postMeta = array()){
+    public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $post_parent = 0, $authorId=null, array $postMeta = array(), array $otherPageKeys = array()){
         if (isset($_GET['activated']) && is_admin()){
 
 
             //don't change the code bellow, unless you know what you're doing
 
-            $page_check = get_page_by_title($pageName);
-            $new_page = array(
+            $page_check = get_page_by_path($post_parent ? "${post_parent}/${pageName}" : $pageName);
+            $new_page = array_merge( $otherPageKeys, array(
                 'post_type' => 'page',
                 'post_title' => $pageName,
                 'post_content' => $pageContent,
                 'post_status' => 'publish',
                 'post_author' => $authorId ? $authorId : get_current_user_id(),
-            );
-            if(!isset($page_check->ID)){
+                'post_parent' => $post_parent
+            ));
+            if(isset($page_check->ID)){
+                return null;
+            }
+            else{
                 $new_page_id = wp_insert_post($new_page);
                 if(!empty($templateFileName)){
                     update_post_meta($new_page_id, '_wp_page_template', $templateFileName);
@@ -89,9 +94,8 @@ class junto_loader{
                 foreach ($postMeta as $postMetaKey => $postMetaValue){
                     update_post_meta($new_page_id, $postMetaKey, $postMetaValue);
                 }
+                return $new_page_id;
             }
-            return $new_page_id;
-
         }
     }
 
