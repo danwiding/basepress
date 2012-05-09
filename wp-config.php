@@ -29,6 +29,7 @@ $templateDirectory = dirname($path);
 define('REPO_PATH', $path);
 define('LIB_PATH', $path . '/lib');
 define('JUNTO_COMMON_PATH', $path . '/junto-common');
+define('ERRLOG_PATH', $path . '/error_log.log');
 define('POLY_THEME_PATH', $templateDirectory . '/themes');
 require_once (JUNTO_COMMON_PATH . '/junto_exception_handler.php');
 require_once (JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
