@@ -41,7 +41,7 @@ function wp_create_thumbnail( $file, $max_side, $deprecated = '' ) {
  * @param int $dst_h The destination height.
  * @param int $src_abs Optional. If the source crop points are absolute.
  * @param string $dst_file Optional. The destination file to write to.
- * @return string|WP_Error|false New filepath on success, WP_Error or false on failure.
+ * @return string|WP_Error|false New filePath on success, WP_Error or false on failure.
  */
 function wp_crop_image( $src_file, $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $src_abs = false, $dst_file = false ) {
 	if ( is_numeric( $src_file ) ) // Handle int as attachment ID
