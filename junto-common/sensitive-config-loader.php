@@ -4,7 +4,7 @@ function SensitiveConfigLoader($path){
 	if (!$sensitiveJSONDataString)
 	throw new exception("sensitive data file is missing");
 	$sensitiveArray = json_decode($sensitiveJSONDataString, true);
-	foreach ($sensitiveArray as $topKey => $topValue){
+	foreach ((array)$sensitiveArray as $topKey => $topValue){
         if(!defined($topKey))
             define($topKey, $topValue);
 	}
