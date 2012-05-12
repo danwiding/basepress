@@ -26,8 +26,10 @@
 $path = dirname(__FILE__);
 $templateDirectory = dirname($path);
 
+define('REPO_PATH', $templateDirectory  );
 define('LIB_PATH', $path . '/lib');
 define('JUNTO_COMMON_PATH', $path . '/junto-common');
+define('ERRLOG_PATH', $path . '/error_log.log');
 define('POLY_THEME_PATH', $templateDirectory . '/themes');
 require_once (JUNTO_COMMON_PATH . '/junto_exception_handler.php');
 require_once (JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
@@ -71,4 +73,4 @@ if ( !defined('ABSPATH') )
 /** Sets up WordPress vars and included files. */
 //if (!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING != 'On')
 require_once(ABSPATH . 'wp-settings.php');
-require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
+//require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
