@@ -24,7 +24,9 @@
 //**********     Print Nice     **********//
 	
 	function print_nice($var, $dump = false){
-		echo '<pre>'.($dump ? var_dump($var) : print_r($var)).'</pre>';
+		echo '<pre>';
+		($dump ? var_dump($var) : print_r($var));
+		echo '</pre>';
 	}
 
 //**********     Browser Specific Body Classes     **********//
