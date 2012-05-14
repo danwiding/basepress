@@ -56,6 +56,7 @@ nbproject
 
 #gets rid of the error_log files
 error_log
+error_log.log
 wordpress/wp-content/blogs.dir
 backwpup_log
 
