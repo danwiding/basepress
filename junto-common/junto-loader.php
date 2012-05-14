@@ -23,6 +23,7 @@ class junto_loader{
         require_once(LIB_PATH . "/php-object-generator/objects/class.database.php");
         require_once(LIB_PATH . "/php-object-generator/objects/class.pog_base.php");
         add_filter( 'show_admin_bar', '__return_false' );
+        require_once(JUNTO_COMMON_PATH . "/junto-misc-functions/JuntoUtilities.php");
 //        require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
         if ($filePath!=null){
             new ThemeMvcClassLoader($filePath);
