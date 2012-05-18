@@ -149,6 +149,8 @@ class ThemeMvcClassLoader{
             $requirePath.="/__models/class.";
         else if(stristr($className, "view"))
             $requirePath.="/__views";
+        else if(stristr($className, "helper"))
+        	$requirePath.="/__helpers";
         if(strcasecmp(substr($className,0,4), 'mock')==0)
             $requirePath.="/mockobjects";
         $requirePath.= "/{$className}.php";
