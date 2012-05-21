@@ -31,13 +31,16 @@ define('LIB_PATH', $path . '/lib');
 define('JUNTO_COMMON_PATH', $path . '/junto-common');
 define('ERRLOG_PATH', $path . '/error_log.log');
 define('POLY_THEME_PATH', $templateDirectory . '/themes');
-require_once (JUNTO_COMMON_PATH . '/junto_exception_handler.php');
-require_once (JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
-SensitiveConfigLoader($templateDirectory . "/config/sensitive/wp-sensitive-local.json");
+require_once(JUNTO_COMMON_PATH . '/junto_exception_handler.php');
+require_once(JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
 require_once(JUNTO_COMMON_PATH . '/junto-loader.php');
 
-require_once ($templateDirectory . '/config/wordpress-app/wp-config-app.php');
-require_once ($templateDirectory . '/config/wordpress-app/wp-config-local.php');
+require_once($templateDirectory . '/config/wordpress-app/wp-config-app.php');
+if(defined('AUTOMATED_TESTING') && AUTOMATED_TESTING =='On')
+    require_once($templateDirectory . '/config/wordpress-app/wp-config-phpunit-test.php');
+else
+    require_once($templateDirectory . '/config/wordpress-app/wp-config-local.php');
+SensitiveConfigLoader($templateDirectory . "/config/sensitive/wp-sensitive-local.json");
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -71,6 +74,6 @@ if ( !defined('ABSPATH') )
 
 
 /** Sets up WordPress vars and included files. */
-//if (!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING != 'On')
-require_once(ABSPATH . 'wp-settings.php');
+if (!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING != 'On')
+    require_once(ABSPATH . 'wp-settings.php');
 //require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
