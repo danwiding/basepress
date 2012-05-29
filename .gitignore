@@ -60,6 +60,9 @@ error_log.log
 wordpress/wp-content/blogs.dir
 backwpup_log
 
+#ignore local favicon that ignores errors
+wordpress/favicon.ico
+
 #sensitive files
 deploy-sensitive*.json
 wp-sensitive*.json
