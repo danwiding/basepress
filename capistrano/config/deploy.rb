@@ -55,6 +55,7 @@ namespace :JuntoDeploy do
         run "chmod -R 777 #{release_path}"
         run "ln -nfs #{release_path}/plugins #{release_path}/juntobasepress/wordpress/wp-content/plugins"
         run "ln -nfs #{release_path}/themes #{release_path}/juntobasepress/wordpress/wp-content/themes"
+        run "ln -nfs #{release_path}/juntobasepress/junto-common/junto-content #{release_path}/juntobasepress/wordpress/wp-content/junto-content"
     end
 
     task :SetLocalConfiguration, :roles => :app do
