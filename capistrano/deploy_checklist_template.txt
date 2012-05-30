@@ -1,0 +1,26 @@
+Staging
+Steps to deploy a new instance
+
+[] Check that the config/capistrano-deploy/staging.rb is correct
+[] Check that the config/capistrano-deploy/deploy-sensitive-staging.bf is correct
+[] Check that the config/wordpress-app/wp-config-staging.php is correct
+[] Make sure a db exists for the stage, create one if needed
+[] Create directory for project
+[] Run cap {stage} deploy:InitializeServer
+[] Set up addon domain to point to new wordpress install
+[] Create db via wordpress autoinstaller
+[] Activate theme
+
+
+Production
+Steps to deploy a new instance
+
+[] Check that the config/capistrano-deploy/production.rb is correct
+[] Check that the config/capistrano-deploy/deploy-sensitive-production.bf is correct
+[] Check that the config/wordpress-app/wp-config-production.php is correct
+[] Make sure a db exists for the stage, create one if needed
+[] Create directory for project
+[] Run cap {stage} deploy:InitializeServer
+[] Set up addon domain to point to new wordpress install
+[] Create db via wordpress autoinstaller
+[] Activate theme
