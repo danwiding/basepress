@@ -6,7 +6,7 @@ Steps to deploy a new instance
 [] Check that the config/wordpress-app/wp-config-staging.php is correct
 [] Make sure a db exists for the stage, create one if needed
 [] Create directory for project
-[] Run cap {stage} deploy:InitializeServer
+[] Run cap staging deploy:InitializeServer
 [] Set up addon domain to point to new wordpress install
 [] Create db via wordpress autoinstaller
 [] Activate theme
@@ -20,7 +20,7 @@ Steps to deploy a new instance
 [] Check that the config/wordpress-app/wp-config-production.php is correct
 [] Make sure a db exists for the stage, create one if needed
 [] Create directory for project
-[] Run cap {stage} deploy:InitializeServer
+[] Run cap production deploy:InitializeServer
 [] Set up addon domain to point to new wordpress install
 [] Create db via wordpress autoinstaller
 [] Activate theme
