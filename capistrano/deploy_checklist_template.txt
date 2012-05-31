@@ -5,7 +5,7 @@ Steps to deploy a new instance
 [] Check that the config/capistrano-deploy/deploy-sensitive-staging.bf is correct
 [] Check that the config/wordpress-app/wp-config-staging.php is correct
 [] Make sure a db exists for the stage, create one if needed
-[] Create directory for project
+[] Create a wp-sensitive-staging in the deploy ftp server
 [] Run cap staging deploy:InitializeServer
 [] Set up addon domain to point to new wordpress install
 [] Create db via wordpress autoinstaller
@@ -19,7 +19,7 @@ Steps to deploy a new instance
 [] Check that the config/capistrano-deploy/deploy-sensitive-production.bf is correct
 [] Check that the config/wordpress-app/wp-config-production.php is correct
 [] Make sure a db exists for the stage, create one if needed
-[] Create directory for project
+[] Create a wp-sensitive-production in the deploy ftp server
 [] Run cap production deploy:InitializeServer
 [] Set up addon domain to point to new wordpress install
 [] Create db via wordpress autoinstaller
