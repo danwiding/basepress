@@ -59,7 +59,7 @@ namespace :JuntoDeploy do
     end
 
     task :SetLocalConfiguration, :roles => :app do
-
+        run "mkdir -p #{release_path}/config/sensitive/"
         run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"cd /remoteftp/junto/projects/#{application}/sensitiveconfig; get wp-sensitive-#{stage}.json -o #{release_path}/config/sensitive/wp-sensitive-local.json; quit\" '#{ftp_server}'"
         run "cp #{release_path}/config/wordpress-app/wp-config-#{stage}.php #{release_path}/config/wordpress-app/wp-config-local.php"
         run "cp #{release_path}/config/htaccess/.htaccess-#{stage} #{release_path}/juntobasepress/wordpress/.htaccess"
