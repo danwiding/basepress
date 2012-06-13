@@ -68,6 +68,6 @@ function var_error_handler($output)
 
 //ob_start('var_error_handler');
 
-set_exception_handler('log_friendly_exception');
-set_error_handler('my_error_handler');
+//set_exception_handler('log_friendly_exception');
+//set_error_handler('my_error_handler');
 

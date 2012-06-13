@@ -1,5 +1,5 @@
 <?php
-class POG_Base
+abstract class POG_Base
 {
 	/**
 	 * Overloading
@@ -146,5 +146,21 @@ class POG_Base
 		}
 		return false;
 	}
+
+    abstract function Get($id);
+
+    function SafeGet($id){
+        $this->Get($id);
+
+        $id = $this->GetId();
+        if(empty($id))
+            return null;
+        else
+            return $this;
+    }
+    function GetId(){
+        $arrayKeys = array_keys($this->pog_attribute_type);
+        return $this->$arrayKeys[0];
+    }
 }
 ?>

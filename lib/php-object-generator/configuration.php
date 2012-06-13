@@ -40,7 +40,7 @@ $configuration['proxy_password'] = false;
 
 
 //plugin settings
-$configuration['plugins_path'] = JUNTO_BASE_FOR_POG . '/lib/php-object-generator/plugins';  //absolute path to plugins folder, e.g c:/mycode/test/plugins or /home/phpobj/public_html/plugins
+$configuration['plugins_path'] = JUNTO_BASE_FOR_POG . '/juntobasepress/lib/php-object-generator/plugins';  //absolute path to plugins folder, e.g c:/mycode/test/plugins or /home/phpobj/public_html/plugins
 
 
 ?>

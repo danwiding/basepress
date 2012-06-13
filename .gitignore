@@ -77,3 +77,10 @@ capistrano/config/deploy
 
 #ignore junto-content which is a symlink
 wordpress/wp-content/junto-content
+
+#ignore links in php-object-generator
+lib/php-object-generator/objects/*.php
+!lib/php-object-generator/objects/class.database.php
+!lib/php-object-generator/objects/class.pog_base.php
+lib/php-object-generator/RunTimeFiles/*
+!lib/php-object-generator/RunTimeFiles/EMPTY
