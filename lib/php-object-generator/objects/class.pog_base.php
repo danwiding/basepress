@@ -1,4 +1,9 @@
 <?php
+/**
+ *
+ */
+
+define('JOIN_SEPARATOR',"_this_is_a_separator_");
 abstract class POG_Base
 {
 	/**
@@ -160,7 +165,196 @@ abstract class POG_Base
     }
     function GetId(){
         $arrayKeys = array_keys($this->pog_attribute_type);
-        return $this->$arrayKeys[0];
+        if($this->$arrayKeys[0])
+            return $this->$arrayKeys[0];
+        else
+            return null;
+    }
+
+    function GetIdPropertyName(){
+        $arrayKeys = array_keys($this->pog_attribute_type);
+        return $arrayKeys[0];
+    }
+
+    protected $modelAssociation = array();
+
+    protected $tableName = "";
+
+//    public $pog_query;
+
+    protected function GetTableName(){
+        return $this->tableName;
+    }
+
+    public function GetInDepth($id){
+        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)));
+        if (empty($objectList))
+            return null;
+        return $objectList[0];
+    }
+
+    //ciruclar references request -> bid, bid -> request
+    //don't allow?
+    /**
+     * @static
+     * @param POG_Base $object
+     * @param array $tablesAndColumns
+     * @param null $parentTable
+     * @param null $parentFK
+     */
+    private static function GetAllColumnsWithProperties($object, $tablesAndColumns = array(), $parentFK = null){
+
+        if(!empty($parentFK)){
+            $joinClause = "{$parentFK}={$object->GetTableName()}.{$object->GetIdPropertyName()} ";
+            $tablesAndColumns[get_class($object)] = array('JoinClause'=>$joinClause, 'Columns'=>self::GetAttributes($object));
+        }
+        else
+            $tablesAndColumns[get_class($object)] = array('JoinClause'=>false,'Columns'=>self::GetAttributes($object));
+        foreach($object->modelAssociation as $propertyId => $propertyObjectAssociation){
+            if(!array_key_exists($propertyObjectAssociation['object'], $tablesAndColumns)){
+                $objectModel = new $propertyObjectAssociation['object'];
+                $foreignKey ="{$object->GetTableName()}.{$propertyId}";
+                $tablesAndColumns = self::GetAllColumnsWithProperties($objectModel, $tablesAndColumns, $foreignKey);
+            }
+        }
+        return $tablesAndColumns;
+    }
+
+    /**
+     * @static
+     * @param POG_Base $pog_object
+     * @param array $fetched_row
+     * @return mixed
+     */
+    private static function PopulateObjectInDepth($pog_object, $fetched_row, $fkClause=''){
+        $att = $pog_object->GetAttributes($pog_object);
+        foreach ($att as $column)
+        {
+            $resultKeyName = strtolower($fkClause . $column);
+            if(array_key_exists($resultKeyName, $fetched_row)){
+                $pog_object->{$column} = $pog_object->Unescape($fetched_row[$resultKeyName]);
+            }
+            else
+                return null;
+        }
+        foreach($pog_object->modelAssociation as $propertyId => $propertyObjectAssociation){
+            $childObjectModel = new $propertyObjectAssociation['object'];
+            $fkJoinClause = "{$pog_object->GetTableName()}.{$propertyId}={$childObjectModel->GetTableName()}.{$childObjectModel->GetIdPropertyName()} ";
+            $pog_object->{$propertyObjectAssociation['property']}= self::PopulateObjectInDepth($childObjectModel, $fetched_row,$fkJoinClause);
+        }
+        return $pog_object;
+    }
+
+    //more than 1 layer of tables
+
+
+    /**
+     * Returns a sorted array of objects that match given conditions
+     * @param multidimensional array {("field", "comparator", "value"), ("field", "comparator", "value"), ...}
+     * @param string $sortBy
+     * @param boolean $ascending
+     * @param int limit
+     * @return array $buyerList
+     */
+    public function GetListInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='')
+    {
+        $connection = Database::Connect();
+        $sqlLimit = ($limit != '' ? "LIMIT $limit" : '');
+
+        $columnsToFetch = '';
+        $tablesWithJoinClauses='';
+        $tableAndJoinColumns = self::GetAllColumnsWithProperties($this);
+        foreach ($tableAndJoinColumns as $objectClassName => $JoinClauseAndColumns){
+            $objectModel = new $objectClassName;
+            $joinClause = $JoinClauseAndColumns['JoinClause'];
+            if($joinClause ===false){
+                $tablesWithJoinClauses.=" `{$objectModel->GetTableName()}` ";
+            }
+            else{
+                $tablesWithJoinClauses.=" Inner Join `{$objectModel->GetTableName()}` on $joinClause ";
+            }
+            foreach($JoinClauseAndColumns['Columns'] as $column){
+                $aliasedColumnName = strtolower($joinClause . $column);
+                $columnsToFetch.="`${column}` as `{$aliasedColumnName}`, ";
+            }
+        }
+        $columnsToFetch = substr($columnsToFetch, 0, strlen($columnsToFetch)-2);
+
+        $pog_query = "select $columnsToFetch from $tablesWithJoinClauses ";
+
+        //todo set final values, make where clause work, test
+        $objectModelList = Array();
+        if (sizeof($fcv_array) > 0)
+        {
+            $pog_query .= " where ";
+            for ($i=0, $c=sizeof($fcv_array); $i<$c; $i++)
+            {
+                if (sizeof($fcv_array[$i]) == 1)
+                {
+                    $pog_query .= " ".$fcv_array[$i][0]." ";
+                    continue;
+                }
+                else
+                {
+                    if ($i > 0 && sizeof($fcv_array[$i-1]) != 1)
+                    {
+                        $pog_query .= " AND ";
+                    }
+                    if (isset($this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes']) && $this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes'][0] != 'NUMERIC' && $this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes'][0] != 'SET')
+                    {
+                        if ($GLOBALS['configuration']['db_encoding'] == 1)
+                        {
+                            $value = POG_Base::IsColumn($fcv_array[$i][2]) ? "BASE64_DECODE(".$fcv_array[$i][2].")" : "'".$fcv_array[$i][2]."'";
+                            $pog_query .= "BASE64_DECODE(`".$fcv_array[$i][0]."`) ".$fcv_array[$i][1]." ".$value;
+                        }
+                        else
+                        {
+                            $value =  POG_Base::IsColumn($fcv_array[$i][2]) ? $fcv_array[$i][2] : "'".$this->Escape($fcv_array[$i][2])."'";
+                            $pog_query .= "`".$fcv_array[$i][0]."` ".$fcv_array[$i][1]." ".$value;
+                        }
+                    }
+                    else
+                    {
+                        $value = POG_Base::IsColumn($fcv_array[$i][2]) ? $fcv_array[$i][2] : "'".$fcv_array[$i][2]."'";
+                        $pog_query .= "`".$fcv_array[$i][0]."` ".$fcv_array[$i][1]." ".$value;
+                    }
+                }
+            }
+        }
+        if ($sortBy != '')
+        {
+            if (isset($this->pog_attribute_type[$sortBy]['db_attributes']) && $this->pog_attribute_type[$sortBy]['db_attributes'][0] != 'NUMERIC' && $this->pog_attribute_type[$sortBy]['db_attributes'][0] != 'SET')
+            {
+                if ($GLOBALS['configuration']['db_encoding'] == 1)
+                {
+                    $sortBy = "BASE64_DECODE($sortBy) ";
+                }
+                else
+                {
+                    $sortBy = "$sortBy ";
+                }
+            }
+            else
+            {
+                $sortBy = "$sortBy ";
+            }
+        }
+        else
+        {
+            $sortBy = $this->GetIdPropertyName();
+        }
+        $pog_query .= " order by ".$sortBy." ".($ascending ? "asc" : "desc")." $sqlLimit";
+        $this->pog_query = $pog_query;
+        $thisObjectName = get_class($this);
+
+        $cursor = Database::Reader($pog_query, $connection);
+        $objectList = array();
+        while ($row = Database::Read($cursor))
+        {
+            $object = new $thisObjectName;
+            $objectList[]=self::PopulateObjectInDepth($object,$row);
+        }
+        return $objectList;
     }
 }
 ?>

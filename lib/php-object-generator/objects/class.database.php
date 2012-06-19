@@ -100,15 +100,11 @@
 
 	public static function InsertOrUpdate($query, $connection)
 	{
-		try
-		{
-			$r = $connection->query($query);
-			return $connection->lastInsertId();
-		}
-		catch (PDOException $e)
-		{
-			return false;
-		}
+
+            $r = $connection->query($query);
+            return $connection->lastInsertId();
+
+
 	}
 }
 ?>

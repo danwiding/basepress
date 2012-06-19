@@ -39,6 +39,14 @@ define('WP_USER_NAME', rand_str());
 define('WP_USER_EMAIL', rand_str().'@example.com');
 
 //drop_tables();
+
+//run db migrations
+define('MPM_PATH', REPO_PATH . '/juntobasepress/tools/mysql-php-migrations');
+define('MPM_VERSION', '2.1.4');
+require_once(MPM_PATH . '/lib/init.php');
+$latestController = new MpmBuildController('build', array('--force'));
+$latestController->doAction(true);
+
 // initialize wp
 define('WP_INSTALLING', 1);
 $_SERVER['PATH_INFO'] = $_SERVER['SCRIPT_NAME']; // prevent a warning from some sloppy code in wp-settings.php
@@ -65,6 +73,11 @@ if (is_dir(DIR_TESTPLUGINS)) {
         include_once($plugin);
 }
 
+//load the current theme
+//switch_theme(WP_DEFAULT_THEME, WP_DEFAULT_THEME);
+require_once( get_template_directory() . '/functions.php' );
+
+
 // include all files in DIR_TESTCASE, and fetch all the WPTestCase descendents
     $files = wptest_get_all_test_files(DIR_TESTCASE);
     foreach ($files as $file) {
@@ -85,7 +98,7 @@ if ( isset($opts['l']) ) {
     list ($result, $printer) = wptest_run_tests($classes, isset($opts['t']) ? $opts['t'] : array(), isset($opts['g']) ? $opts['g'] : null );
     wptest_print_result($printer,$result);
 }
-if ( !isset($opts['n']) ) {
-    // clean up the database
-    drop_tables();
-}
+//if ( !isset($opts['n']) ) {
+//    // clean up the database
+//    drop_tables();
+//}
