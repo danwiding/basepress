@@ -70,7 +70,7 @@ class junto_loader{
      * @return int|WP_Error the id of the page
      */
     public static function CreatePageOnThemeActivation($pageName, $templateFileName=null, $pageContent = '', $post_parent = 0, $authorId=null, array $postMeta = array(), array $otherPageKeys = array()){
-        if (isset($_GET['activated']) && is_admin()){
+        if ((isset($_GET['activated']) && is_admin())||AUTOMATED_TESTING=='On'){
 
 
             //don't change the code bellow, unless you know what you're doing

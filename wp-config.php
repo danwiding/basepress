@@ -26,6 +26,8 @@
 $path = dirname(__FILE__);
 $templateDirectory = dirname($path);
 
+if(!defined('AUTOMATED_TESTING'))
+    define('AUTOMATED_TESTING', 'Off');
 define('REPO_PATH', $templateDirectory  );
 define('LIB_PATH', $path . '/lib');
 define('JUNTO_COMMON_PATH', $path . '/junto-common');
