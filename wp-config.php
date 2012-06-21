@@ -62,6 +62,9 @@ define('DB_COLLATE', '');
  */
 define('WPLANG', '');
 
+define('JuntoScriptKey', 'JuntoScripts');
+$GLOBALS[JuntoScriptKey]=array();
+
 // debug mode set in wp-locals
 
 
