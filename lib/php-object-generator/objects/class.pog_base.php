@@ -176,6 +176,10 @@ abstract class POG_Base
         return $arrayKeys[0];
     }
 
+    function Exists(){
+        return $this->GetId()!=null;
+    }
+
     protected $modelAssociation = array();
 
     protected $tableName = "";
@@ -192,6 +196,29 @@ abstract class POG_Base
             return null;
         return $objectList[0];
     }
+
+    public function SaveOneDepth(){
+        foreach($this->modelAssociation as $relationId =>$relationNameObjectAssociation){
+            $savedId = $this->$relationNameObjectAssociation['property']->Save();
+            $this->$relationId = $savedId;
+        }
+        return $this->Save();
+    }
+
+    public function GetChildObject($propertyName){
+        foreach($this->modelAssociation as $relationId =>$relationNameObjectAssociation){
+            if($relationNameObjectAssociation['property']==$propertyName){
+                if(empty($this->$propertyName)){
+                    $propertyModel = new $relationNameObjectAssociation['object'];
+                    $this->$propertyName = $propertyModel->SafeGet($this->$relationId);
+                }
+                return $this->$propertyName;
+            }
+        }
+        throw new exception("property $propertyName not found on object model");
+    }
+
+    abstract function Save();
 
     //ciruclar references request -> bid, bid -> request
     //don't allow?
