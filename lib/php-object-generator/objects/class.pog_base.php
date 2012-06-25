@@ -199,8 +199,10 @@ abstract class POG_Base
 
     public function SaveOneDepth(){
         foreach($this->modelAssociation as $relationId =>$relationNameObjectAssociation){
-            $savedId = $this->$relationNameObjectAssociation['property']->Save();
-            $this->$relationId = $savedId;
+            if($this->$relationNameObjectAssociation['property']!=null){
+                $savedId = $this->$relationNameObjectAssociation['property']->Save();
+                $this->$relationId = $savedId;
+            }
         }
         return $this->Save();
     }
