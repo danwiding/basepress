@@ -31,6 +31,12 @@
 		echo '</pre>';
 	}
 
+//**********     SQL Timestamp Conversion     **********//
+
+	function sqldate($format, $date){
+		return date($format, strtotime($date));
+	}
+
 //**********     Browser Specific Body Classes     **********//
 
     add_filter('body_class', 'polymathic_browser_body_classes');
@@ -62,6 +68,8 @@
 	 	remove_action('admin_footer', 'wp_admin_bar_render', 1000);
 		remove_action('personal_options', '_admin_bar_preferences');
 
+        add_filter('show_admin_bar', '__return_false');
+
 	    add_filter('admin_head','remove_admin_bar_style_backend');
 	    function remove_admin_bar_style_backend(){
 			echo '<style>body.admin-bar #wpcontent, body.admin-bar #adminmenu { padding-top: 0px !important; }</style>';
@@ -75,4 +83,66 @@
 			</style>';
 	    }
 	endif;
+
+/************   Generate Form Input Fields   ************/
+
+	function generate_input($type, $label, $id, $name, $val = '', $place = '', $required = false, $disabled = false, $extras = ''){
+		$req 	= ($required ? 'required' : '');
+		$span 	= ($required ? ' <span class="req">&#65290;</span>' : '');
+		$dis 	= ($disabled ? 'readonly="readonly"' : '');
+
+		$html = ($type != 'hidden' ? '<div class="input_wrap input_wrap_'.$type.'">' : '');
+
+	// Textarea
+		if ($type == 'textarea') :
+			$html .= ($label == false ? '' : '<label for="'.$id.'">'.$span.$label.'</label>');
+			$html .= '<textarea id="'.$id.'" name="'.$name.'" placeholder="'.$place.'" '.$req.' '.$dis.' '.$extras.'>'.$val.'</textarea>';
+
+	// Select Box
+		elseif ($type == 'select' && is_array($val)) :
+			$html .= ($label == false ? '' : '<label for="'.$id.'">'.$span.$label.'</label>');
+			$html .= '<select id="'.$id.'" name="'.$name.'">';
+			$html .= '<option value="" disabled '.($place ? 'selected="yes"' : '').'>Select One...</option>';
+			foreach ($val as $value) :
+				$selected = (in_array($value['id'], (array)$place) ? 'selected="yes"' : '');
+				$html .= '<option value="'.$value['id'].'" '.$selected.'>'.$value['name'].'</option>';
+			endforeach;
+			$html .= '</select>';
+
+	// Checkbox
+		elseif ($type == 'checkbox' && is_array($val)) :
+			$html .= ($label == false ? '' : '<label>'.$span.$label.'</label>');
+			$html .= '<div id="'.$id.'" class="checkboxes-wrap">';
+			foreach ($val as $value) :
+				$selected = (in_array($value['id'], (array)$place) ? 'checked' : '');
+				$html .= '<input type="'.$type.'" id="'.urlencode($value['name']).'" value="'.$value['id'].'" name="'.$name.'[]" '.$selected.'/>';
+				$html .= '<label for="'.urlencode($value['name']).'" class="check-label">'.$value['name'].'</label>';
+			endforeach;
+			$html .= '</div>';
+
+	// Radio Buttons
+		elseif ($type == 'radio' && is_array($val)) :
+			$html .= ($label == false ? '' : '<label>'.$span.$label.'</label>');
+			$html .= '<div id="'.$id.'" class="radio-wrap">';
+			foreach ($val as $value) :
+				$selected = (in_array($value['id'], (array)$place) ? 'checked' : '');
+				$html .= '<input type="'.$type.'" id="'.urlencode($value['name']).'" value="'.$value['id'].'" name="'.$name.'" '.$selected.'/>';
+				$html .= '<label for="'.urlencode($value['name']).'" class="radio-label">'.$value['name'].'</label>';
+			endforeach;
+			$html .= '</div>';
+
+	// Hidden Field
+		elseif ($type == 'hidden') :
+			$html .= '<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$val.'" placeholder="'.$place.'" '.$req.' '.$dis.' />';
+
+	// Input / Text Field
+		else :
+			$html .= ($label == false ? '' : '<label for="'.$id.'">'.$span.$label.'</label>');
+			$html .= '<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$val.'" placeholder="'.$place.'" '.$req.' '.$dis.'  '.$extras.'/>';
+		endif;
+
+		$html .= ($type != 'hidden' ? '</div>' : '');
+		return $html;
+	}
+
 ?>
