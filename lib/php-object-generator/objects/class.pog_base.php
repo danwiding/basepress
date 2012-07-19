@@ -229,8 +229,9 @@ abstract class POG_Base
      * @param null $parentTable
      * @param null $parentFK
      */
-    private static function GetAllColumnsWithProperties($object, $tablesAndColumns = array(), $parentFK = null){
-
+    private static function GetAllColumnsWithProperties($object, $depthLimit=-1, $tablesAndColumns = array(), $parentFK = null){
+        if($depthLimit==0)
+            return $tablesAndColumns;
         if(!empty($parentFK)){
             $joinClause = "{$parentFK}={$object->GetTableName()}.{$object->GetIdPropertyName()} ";
             $tablesAndColumns[get_class($object)] = array('JoinClause'=>$joinClause, 'Columns'=>self::GetAttributes($object));
@@ -241,7 +242,7 @@ abstract class POG_Base
             if(!array_key_exists($propertyObjectAssociation['object'], $tablesAndColumns)){
                 $objectModel = new $propertyObjectAssociation['object'];
                 $foreignKey ="{$object->GetTableName()}.{$propertyId}";
-                $tablesAndColumns = self::GetAllColumnsWithProperties($objectModel, $tablesAndColumns, $foreignKey);
+                $tablesAndColumns = self::GetAllColumnsWithProperties($objectModel, $depthLimit-1, $tablesAndColumns, $foreignKey);
             }
         }
         return $tablesAndColumns;
@@ -283,14 +284,14 @@ abstract class POG_Base
      * @param int limit
      * @return array $buyerList
      */
-    public function GetListInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='')
+    public function GetListInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='', $depthLimit=-1)
     {
         $connection = Database::Connect();
         $sqlLimit = ($limit != '' ? "LIMIT $limit" : '');
 
         $columnsToFetch = '';
         $tablesWithJoinClauses='';
-        $tableAndJoinColumns = self::GetAllColumnsWithProperties($this);
+        $tableAndJoinColumns = self::GetAllColumnsWithProperties($this, $depthLimit);
         foreach ($tableAndJoinColumns as $objectClassName => $JoinClauseAndColumns){
             $objectModel = new $objectClassName;
             $joinClause = $JoinClauseAndColumns['JoinClause'];
