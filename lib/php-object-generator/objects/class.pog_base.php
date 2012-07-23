@@ -292,23 +292,26 @@ abstract class POG_Base
         $columnsToFetch = '';
         $tablesWithJoinClauses='';
         $tableAndJoinColumns = self::GetAllColumnsWithProperties($this, $depthLimit);
+        $pogAttributes=array();
         foreach ($tableAndJoinColumns as $objectClassName => $JoinClauseAndColumns){
             $objectModel = new $objectClassName;
+            $pogAttributes=array_merge($pogAttributes,$objectModel->pog_attribute_type);
             $joinClause = $JoinClauseAndColumns['JoinClause'];
             if($joinClause ===false){
                 $tablesWithJoinClauses.=" `{$objectModel->GetTableName()}` ";
             }
             else{
-                $tablesWithJoinClauses.=" Inner Join `{$objectModel->GetTableName()}` on $joinClause ";
+                $tablesWithJoinClauses.=" left Join `{$objectModel->GetTableName()}` on $joinClause ";
             }
             foreach($JoinClauseAndColumns['Columns'] as $column){
                 $aliasedColumnName = strtolower($joinClause . $column);
-                $columnsToFetch.="`${column}` as `{$aliasedColumnName}`, ";
+                $columnsToFetch.="`{$objectModel->GetTableName()}`.`${column}` as `{$aliasedColumnName}`, ";
             }
         }
         $columnsToFetch = substr($columnsToFetch, 0, strlen($columnsToFetch)-2);
 
         $pog_query = "select $columnsToFetch from $tablesWithJoinClauses ";
+        //array merge pog attribute type
 
         //todo set final values, make where clause work, test
         $objectModelList = Array();
@@ -328,7 +331,7 @@ abstract class POG_Base
                     {
                         $pog_query .= " AND ";
                     }
-                    if (isset($this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes']) && $this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes'][0] != 'NUMERIC' && $this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes'][0] != 'SET')
+                    if (isset($pogAttributes[$fcv_array[$i][0]]['db_attributes']) && $pogAttributes[$fcv_array[$i][0]]['db_attributes'][0] != 'NUMERIC' && $pogAttributes[$fcv_array[$i][0]]['db_attributes'][0] != 'SET')
                     {
                         if ($GLOBALS['configuration']['db_encoding'] == 1)
                         {
@@ -351,7 +354,7 @@ abstract class POG_Base
         }
         if ($sortBy != '')
         {
-            if (isset($this->pog_attribute_type[$sortBy]['db_attributes']) && $this->pog_attribute_type[$sortBy]['db_attributes'][0] != 'NUMERIC' && $this->pog_attribute_type[$sortBy]['db_attributes'][0] != 'SET')
+            if (isset($pogAttributes[$sortBy]['db_attributes']) && $pogAttributes[$sortBy]['db_attributes'][0] != 'NUMERIC' && $pogAttributes[$sortBy]['db_attributes'][0] != 'SET')
             {
                 if ($GLOBALS['configuration']['db_encoding'] == 1)
                 {
@@ -377,6 +380,10 @@ abstract class POG_Base
 
         $cursor = Database::Reader($pog_query, $connection);
         $objectList = array();
+        if($cursor==null){
+            print_r($pog_query);
+            throw new exception('The Query Failed');
+        }
         while ($row = Database::Read($cursor))
         {
             $object = new $thisObjectName;
