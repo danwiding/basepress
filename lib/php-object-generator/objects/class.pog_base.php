@@ -199,8 +199,10 @@ abstract class POG_Base
 
     public function SaveOneDepth(){
         foreach($this->modelAssociation as $relationId =>$relationNameObjectAssociation){
-            $savedId = $this->$relationNameObjectAssociation['property']->Save();
-            $this->$relationId = $savedId;
+            if($this->$relationNameObjectAssociation['property']!=null){
+                $savedId = $this->$relationNameObjectAssociation['property']->Save();
+                $this->$relationId = $savedId;
+            }
         }
         return $this->Save();
     }
@@ -265,6 +267,8 @@ abstract class POG_Base
             else
                 return null;
         }
+        if(!$pog_object->Exists())
+            return null;
         foreach($pog_object->modelAssociation as $propertyId => $propertyObjectAssociation){
             $childObjectModel = new $propertyObjectAssociation['object'];
             $fkJoinClause = "{$pog_object->GetTableName()}.{$propertyId}={$childObjectModel->GetTableName()}.{$childObjectModel->GetIdPropertyName()} ";
