@@ -467,6 +467,17 @@ class WPTestCase extends PHPUnit_Framework_TestCase {
 			return $t->count;
 	}
 
+    protected function RunMethodByReflection($name, $args = array(), $parentObject=null) {
+        if($parentObject===null){
+            $parentObject=$this->object;
+        }
+        $invokeObj = is_string($parentObject) ? null : $parentObject;
+        $class = new ReflectionClass(is_string($parentObject) ? $parentObject :get_class($parentObject));
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs($invokeObj, $args);
+    }
+
 }
 
 // simple functions for loading and running tests
