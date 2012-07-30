@@ -182,6 +182,11 @@ abstract class POG_Base
 
     protected $modelAssociation = array();
 
+    public function disableModelAssociationItem($key){
+        if(array_key_exists($key, $this->modelAssociation))
+            unset($this->modelAssociation[$key]);
+    }
+
     protected $tableName = "";
 
 //    public $pog_query;
@@ -381,6 +386,7 @@ abstract class POG_Base
         $pog_query .= " order by ".$sortBy." ".($ascending ? "asc" : "desc")." $sqlLimit";
         $this->pog_query = $pog_query;
         $thisObjectName = get_class($this);
+        error_log($pog_query);
 
         $cursor = Database::Reader($pog_query, $connection);
         $objectList = array();
