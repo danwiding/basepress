@@ -394,7 +394,7 @@ abstract class POG_Base
         $cursor = Database::Reader($pog_query, $connection);
         $objectList = array();
         if($cursor==null){
-            print_r($pog_query);
+            error_log($pog_query);
             throw new exception('The Query Failed');
         }
         while ($row = Database::Read($cursor))
