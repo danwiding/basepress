@@ -28,7 +28,8 @@ abstract class POG_Base
 	}
 
 
-	function SetFieldAttribute($fieldName, $attributeName, $attributeValue)
+
+    function SetFieldAttribute($fieldName, $attributeName, $attributeValue)
 	{
         if (isset($this->pog_attribute_type[$fieldName]) && isset($this->pog_attribute_type[$fieldName][$attributeName]))
         {
@@ -195,10 +196,13 @@ abstract class POG_Base
         return $this->tableName;
     }
 
-    public function GetInDepth($id){
-        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)));
+    public function GetInDepth($id, $depth=-1){
+        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)),'','','',$depth);
         if (empty($objectList))
             return null;
+        foreach (get_object_vars($objectList[0]) as $property => $value){
+            $this->$property = $value;
+        }
         return $objectList[0];
     }
 
@@ -386,7 +390,6 @@ abstract class POG_Base
         $pog_query .= " order by ".$sortBy." ".($ascending ? "asc" : "desc")." $sqlLimit";
         $this->pog_query = $pog_query;
         $thisObjectName = get_class($this);
-        error_log($pog_query);
 
         $cursor = Database::Reader($pog_query, $connection);
         $objectList = array();
