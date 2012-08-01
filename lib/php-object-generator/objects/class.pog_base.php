@@ -222,6 +222,7 @@ abstract class POG_Base
                 if(empty($this->$propertyName)){
                     $propertyModel = new $relationNameObjectAssociation['object'];
                     $this->$propertyName = $propertyModel->SafeGet($this->$relationId);
+                    $this->$propertyName->pog_query=null;
                 }
                 return $this->$propertyName;
             }
