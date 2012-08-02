@@ -1,10 +1,10 @@
 set :stages, %w(production staging)
 
-stages.each do |stage| 
-	
+stages.each do |stage|
+
 	if !FileTest.exists?("config/deploy/deploy-sensitive-#{stage}.bf")
 	 raise " \n *****ERROR***** \n You don't have a #{stage} file at \n config/deploy/deploy-sensitive-#{stage}.bf \n  Try running the basicdevsetup.sh script first \n ***** \n "
-	end 
+	end
 end
 
 
@@ -17,6 +17,7 @@ set :deploy_via, :remote_cache
 set :copy_exclude, [".hg", ".DS_Store", ".hgignore"]
 set :git_enable_submodules,1
 set :use_sudo, false
+set :reseller, false
 
 #forwards ssh keys from local machine
 ssh_options[:forward_agent] = true
@@ -69,6 +70,12 @@ namespace :JuntoDeploy do
     task :RunDbMigrations, :roles => :app do
         run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php latest"
     end
+
+    task :SetupHostGatorReSellerSymlink, :roles => :app do
+    	if :reseller
+    		run "rm -f ~/public_html && ln -s #{release_path}/juntobasepress/wordpress ~/public_html"
+    	end
+    end
 end
 
 namespace(:deploy) do
@@ -97,4 +104,5 @@ before "deploy:symlink", "JuntoDeploy:LinkCurrentSharedFolders"
 before "deploy:symlink", "JuntoDeploy:SetLocalConfiguration"
 before "deploy:symlink", "deploy:backup"
 after "JuntoDeploy:SetLocalConfiguration", "JuntoDeploy:RunDbMigrations"
+after "deploy:symlink", "JuntoDeploy:SetupHostGatorReSellerSymlink"
 after "deploy:symlink", "deploy:cleanup"
