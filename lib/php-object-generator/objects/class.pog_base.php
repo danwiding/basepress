@@ -28,7 +28,8 @@ abstract class POG_Base
 	}
 
 
-	function SetFieldAttribute($fieldName, $attributeName, $attributeValue)
+
+    function SetFieldAttribute($fieldName, $attributeName, $attributeValue)
 	{
         if (isset($this->pog_attribute_type[$fieldName]) && isset($this->pog_attribute_type[$fieldName][$attributeName]))
         {
@@ -182,6 +183,11 @@ abstract class POG_Base
 
     protected $modelAssociation = array();
 
+    public function disableModelAssociationItem($key){
+        if(array_key_exists($key, $this->modelAssociation))
+            unset($this->modelAssociation[$key]);
+    }
+
     protected $tableName = "";
 
 //    public $pog_query;
@@ -190,10 +196,13 @@ abstract class POG_Base
         return $this->tableName;
     }
 
-    public function GetInDepth($id){
-        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)));
+    public function GetInDepth($id, $depth=-1){
+        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)),'','','',$depth);
         if (empty($objectList))
             return null;
+        foreach (get_object_vars($objectList[0]) as $property => $value){
+            $this->$property = $value;
+        }
         return $objectList[0];
     }
 
@@ -213,6 +222,7 @@ abstract class POG_Base
                 if(empty($this->$propertyName)){
                     $propertyModel = new $relationNameObjectAssociation['object'];
                     $this->$propertyName = $propertyModel->SafeGet($this->$relationId);
+                    $this->$propertyName->pog_query=null;
                 }
                 return $this->$propertyName;
             }
@@ -385,7 +395,7 @@ abstract class POG_Base
         $cursor = Database::Reader($pog_query, $connection);
         $objectList = array();
         if($cursor==null){
-            print_r($pog_query);
+            error_log($pog_query);
             throw new exception('The Query Failed');
         }
         while ($row = Database::Read($cursor))
