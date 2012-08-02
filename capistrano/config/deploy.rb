@@ -73,7 +73,8 @@ namespace :JuntoDeploy do
 
     task :SetupHostGatorReSellerSymlink, :roles => :app do
     	if :reseller
-    		run "rm -f ~/public_html && ln -s #{release_path}/juntobasepress/wordpress ~/public_html"
+    		run "rm -f ~/public_html"
+    		run "ln -s #{release_path}/juntobasepress/wordpress ~/public_html"
     	end
     end
 end
