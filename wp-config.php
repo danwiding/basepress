@@ -26,16 +26,9 @@
 $path = dirname(__FILE__);
 $templateDirectory = dirname($path);
 
-if(!defined('AUTOMATED_TESTING'))
-    define('AUTOMATED_TESTING', 'Off');
-define('REPO_PATH', $templateDirectory  );
-define('LIB_PATH', $path . '/lib');
-define('JUNTO_COMMON_PATH', $path . '/junto-common');
-define('ERRLOG_PATH', $path . '/error_log.log');
-define('POLY_THEME_PATH', $templateDirectory . '/themes');
-require_once(JUNTO_COMMON_PATH . '/junto_exception_handler.php');
-require_once(JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
-require_once(JUNTO_COMMON_PATH . '/junto-loader.php');
+require_once($path . '/junto-common/junto-loader.php');
+
+junto_loader::LoadConfiguration();
 
 require_once($templateDirectory . '/config/wordpress-app/wp-config-app.php');
 if(defined('AUTOMATED_TESTING') && AUTOMATED_TESTING =='On')

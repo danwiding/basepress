@@ -9,6 +9,28 @@
 
 class junto_loader{
 
+    public static function LoadConfiguration($repositoryRootPath = null){
+        if($repositoryRootPath===null)
+            $repositoryRootPath=dirname(dirname(__DIR__));
+        if(!defined('AUTOMATED_TESTING'))
+            define('AUTOMATED_TESTING', 'Off');
+        if(!defined('REPO_PATH'))
+            define('REPO_PATH', $repositoryRootPath  );
+        if(!defined('LIB_PATH'))
+            define('LIB_PATH', $repositoryRootPath . '/juntobasepress/lib');
+        if(!defined('JUNTO_COMMON_PATH'))
+            define('JUNTO_COMMON_PATH', $repositoryRootPath . '/juntobasepress/junto-common');
+        if(!defined('ERRLOG_PATH'))
+            define('ERRLOG_PATH', $repositoryRootPath . '/juntobasepress/error_log.log');
+        if(!defined('POLY_THEME_PATH'))
+            define('POLY_THEME_PATH', $repositoryRootPath . '/themes');
+        require_once(JUNTO_COMMON_PATH . '/junto_exception_handler.php');
+        require_once(JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
+        require_once(JUNTO_COMMON_PATH . '/junto-loader.php');
+
+        SensitiveConfigLoader(REPO_PATH . '/config/sensitive/wp-sensitive-local.json');
+    }
+
 
     /**
      * @static
@@ -22,7 +44,8 @@ class junto_loader{
         require_once(LIB_PATH . "/php-object-generator/configuration.php");
         require_once(LIB_PATH . "/php-object-generator/objects/class.database.php");
         require_once(LIB_PATH . "/php-object-generator/objects/class.pog_base.php");
-        add_filter( 'show_admin_bar', '__return_false' );
+        if(function_exists('add_filter'))
+            add_filter( 'show_admin_bar', '__return_false' );
         require_once(JUNTO_COMMON_PATH . "/junto-misc-functions/JuntoUtilities.php");
 //        require_once(JUNTO_COMMON_PATH . '/poly_baseline.php');
         if ($filePath!=null){
