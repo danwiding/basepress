@@ -26,7 +26,6 @@ class junto_loader{
             define('POLY_THEME_PATH', $repositoryRootPath . '/themes');
         require_once(JUNTO_COMMON_PATH . '/junto_exception_handler.php');
         require_once(JUNTO_COMMON_PATH . '/sensitive-config-loader.php');
-        require_once(JUNTO_COMMON_PATH . '/junto-loader.php');
 
         SensitiveConfigLoader(REPO_PATH . '/config/sensitive/wp-sensitive-local.json');
     }
