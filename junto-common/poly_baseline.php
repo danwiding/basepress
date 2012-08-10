@@ -1,5 +1,7 @@
 <?php 	//	BASELINE POLYMATHIC FUNCTIONS
 
+	include_once(JUNTO_COMMON_PATH . '/junto-misc-functions/cachedWPNavMenu.php');			// Cached WP Navigation Functions
+
 //**********     Include View File     **********//
 
 	function views($include, $once = false){
