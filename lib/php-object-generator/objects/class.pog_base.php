@@ -28,7 +28,8 @@ abstract class POG_Base
 	}
 
 
-	function SetFieldAttribute($fieldName, $attributeName, $attributeValue)
+
+    function SetFieldAttribute($fieldName, $attributeName, $attributeValue)
 	{
         if (isset($this->pog_attribute_type[$fieldName]) && isset($this->pog_attribute_type[$fieldName][$attributeName]))
         {
@@ -182,6 +183,11 @@ abstract class POG_Base
 
     protected $modelAssociation = array();
 
+    public function disableModelAssociationItem($key){
+        if(array_key_exists($key, $this->modelAssociation))
+            unset($this->modelAssociation[$key]);
+    }
+
     protected $tableName = "";
 
 //    public $pog_query;
@@ -190,17 +196,22 @@ abstract class POG_Base
         return $this->tableName;
     }
 
-    public function GetInDepth($id){
-        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)));
+    public function GetInDepth($id, $depth=-1){
+        $objectList = $this->GetListInDepth(array(array($this->GetIdPropertyName(), '=', $id)),'','','',$depth);
         if (empty($objectList))
             return null;
+        foreach (get_object_vars($objectList[0]) as $property => $value){
+            $this->$property = $value;
+        }
         return $objectList[0];
     }
 
     public function SaveOneDepth(){
         foreach($this->modelAssociation as $relationId =>$relationNameObjectAssociation){
-            $savedId = $this->$relationNameObjectAssociation['property']->Save();
-            $this->$relationId = $savedId;
+            if($this->$relationNameObjectAssociation['property']!=null){
+                $savedId = $this->$relationNameObjectAssociation['property']->Save();
+                $this->$relationId = $savedId;
+            }
         }
         return $this->Save();
     }
@@ -211,6 +222,7 @@ abstract class POG_Base
                 if(empty($this->$propertyName)){
                     $propertyModel = new $relationNameObjectAssociation['object'];
                     $this->$propertyName = $propertyModel->SafeGet($this->$relationId);
+                    $this->$propertyName->pog_query=null;
                 }
                 return $this->$propertyName;
             }
@@ -229,8 +241,9 @@ abstract class POG_Base
      * @param null $parentTable
      * @param null $parentFK
      */
-    private static function GetAllColumnsWithProperties($object, $tablesAndColumns = array(), $parentFK = null){
-
+    private static function GetAllColumnsWithProperties($object, $depthLimit=-1, $tablesAndColumns = array(), $parentFK = null){
+        if($depthLimit==0)
+            return $tablesAndColumns;
         if(!empty($parentFK)){
             $joinClause = "{$parentFK}={$object->GetTableName()}.{$object->GetIdPropertyName()} ";
             $tablesAndColumns[get_class($object)] = array('JoinClause'=>$joinClause, 'Columns'=>self::GetAttributes($object));
@@ -241,7 +254,7 @@ abstract class POG_Base
             if(!array_key_exists($propertyObjectAssociation['object'], $tablesAndColumns)){
                 $objectModel = new $propertyObjectAssociation['object'];
                 $foreignKey ="{$object->GetTableName()}.{$propertyId}";
-                $tablesAndColumns = self::GetAllColumnsWithProperties($objectModel, $tablesAndColumns, $foreignKey);
+                $tablesAndColumns = self::GetAllColumnsWithProperties($objectModel, $depthLimit-1, $tablesAndColumns, $foreignKey);
             }
         }
         return $tablesAndColumns;
@@ -264,6 +277,8 @@ abstract class POG_Base
             else
                 return null;
         }
+        if(!$pog_object->Exists())
+            return null;
         foreach($pog_object->modelAssociation as $propertyId => $propertyObjectAssociation){
             $childObjectModel = new $propertyObjectAssociation['object'];
             $fkJoinClause = "{$pog_object->GetTableName()}.{$propertyId}={$childObjectModel->GetTableName()}.{$childObjectModel->GetIdPropertyName()} ";
@@ -283,31 +298,34 @@ abstract class POG_Base
      * @param int limit
      * @return array $buyerList
      */
-    public function GetListInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='')
+    public function GetListInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='', $depthLimit=-1)
     {
         $connection = Database::Connect();
         $sqlLimit = ($limit != '' ? "LIMIT $limit" : '');
 
         $columnsToFetch = '';
         $tablesWithJoinClauses='';
-        $tableAndJoinColumns = self::GetAllColumnsWithProperties($this);
+        $tableAndJoinColumns = self::GetAllColumnsWithProperties($this, $depthLimit);
+        $pogAttributes=array();
         foreach ($tableAndJoinColumns as $objectClassName => $JoinClauseAndColumns){
             $objectModel = new $objectClassName;
+            $pogAttributes=array_merge($pogAttributes,$objectModel->pog_attribute_type);
             $joinClause = $JoinClauseAndColumns['JoinClause'];
             if($joinClause ===false){
                 $tablesWithJoinClauses.=" `{$objectModel->GetTableName()}` ";
             }
             else{
-                $tablesWithJoinClauses.=" Inner Join `{$objectModel->GetTableName()}` on $joinClause ";
+                $tablesWithJoinClauses.=" left Join `{$objectModel->GetTableName()}` on $joinClause ";
             }
             foreach($JoinClauseAndColumns['Columns'] as $column){
                 $aliasedColumnName = strtolower($joinClause . $column);
-                $columnsToFetch.="`${column}` as `{$aliasedColumnName}`, ";
+                $columnsToFetch.="`{$objectModel->GetTableName()}`.`${column}` as `{$aliasedColumnName}`, ";
             }
         }
         $columnsToFetch = substr($columnsToFetch, 0, strlen($columnsToFetch)-2);
 
         $pog_query = "select $columnsToFetch from $tablesWithJoinClauses ";
+        //array merge pog attribute type
 
         //todo set final values, make where clause work, test
         $objectModelList = Array();
@@ -327,7 +345,7 @@ abstract class POG_Base
                     {
                         $pog_query .= " AND ";
                     }
-                    if (isset($this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes']) && $this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes'][0] != 'NUMERIC' && $this->pog_attribute_type[$fcv_array[$i][0]]['db_attributes'][0] != 'SET')
+                    if (isset($pogAttributes[$fcv_array[$i][0]]['db_attributes']) && $pogAttributes[$fcv_array[$i][0]]['db_attributes'][0] != 'NUMERIC' && $pogAttributes[$fcv_array[$i][0]]['db_attributes'][0] != 'SET')
                     {
                         if ($GLOBALS['configuration']['db_encoding'] == 1)
                         {
@@ -350,7 +368,7 @@ abstract class POG_Base
         }
         if ($sortBy != '')
         {
-            if (isset($this->pog_attribute_type[$sortBy]['db_attributes']) && $this->pog_attribute_type[$sortBy]['db_attributes'][0] != 'NUMERIC' && $this->pog_attribute_type[$sortBy]['db_attributes'][0] != 'SET')
+            if (isset($pogAttributes[$sortBy]['db_attributes']) && $pogAttributes[$sortBy]['db_attributes'][0] != 'NUMERIC' && $pogAttributes[$sortBy]['db_attributes'][0] != 'SET')
             {
                 if ($GLOBALS['configuration']['db_encoding'] == 1)
                 {
@@ -376,6 +394,10 @@ abstract class POG_Base
 
         $cursor = Database::Reader($pog_query, $connection);
         $objectList = array();
+        if($cursor==null){
+            error_log($pog_query);
+            throw new exception('The Query Failed');
+        }
         while ($row = Database::Read($cursor))
         {
             $object = new $thisObjectName;

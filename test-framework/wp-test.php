@@ -28,11 +28,11 @@ require_once(DIR_TESTROOT.'/wp-testlib/utils.php');
 
 define('ABSPATH', realpath(DIR_WP).'/');
 
-if (!defined('DIR_TESTPLUGINS'))
-    define('DIR_TESTPLUGINS', './wp-plugins');
 
 require_once(dirname(DIR_WP) .'/wp-config.php');//must be after abspath is defined
 
+if (!defined('DIR_TESTPLUGINS'))
+    define('DIR_TESTPLUGINS', REPO_PATH .'/plugins');
 // install wp
 define('WP_BLOG_TITLE', rand_str());
 define('WP_USER_NAME', rand_str());
@@ -67,11 +67,10 @@ wp_install(WP_BLOG_TITLE, WP_USER_NAME, WP_USER_EMAIL, true);
 // make sure we're installed
 assert(true == is_blog_installed());
 
-// include plugins for testing, if any
-if (is_dir(DIR_TESTPLUGINS)) {
-    $plugins = glob(realpath(DIR_TESTPLUGINS).'/*.php');
-    foreach ($plugins as $plugin)
-        include_once($plugin);
+foreach (get_plugins() as $pluginPath => $pluginData){
+    $returnValue = activate_plugin($pluginPath);
+    if(is_wp_error($returnValue))
+        throw new exception(print_r($returnValue,true));
 }
 
 //load the current theme

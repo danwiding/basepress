@@ -62,7 +62,7 @@
 
 //**********     Disable WP Admin Bar     **********//
 
-	if (!defined('ALLOW_ADMINBAR')):
+	if (!defined('ALLOW_ADMINBAR') && !is_admin()):
 		wp_deregister_script('admin-bar');
 		wp_deregister_style('admin-bar');
 
