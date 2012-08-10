@@ -17,7 +17,6 @@ set :deploy_via, :remote_cache
 set :copy_exclude, [".hg", ".DS_Store", ".hgignore"]
 set :git_enable_submodules,1
 set :use_sudo, false
-set :reseller, false
 
 #forwards ssh keys from local machine
 ssh_options[:forward_agent] = true
@@ -70,13 +69,6 @@ namespace :JuntoDeploy do
     task :RunDbMigrations, :roles => :app do
         run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php latest"
     end
-
-    task :SetupHostGatorReSellerSymlink, :roles => :app do
-    	if :reseller
-    		run "rm -rf ~/public_html"
-    		run "ln -s #{release_path}/juntobasepress/wordpress ~/public_html"
-    	end
-    end
 end
 
 namespace(:deploy) do
@@ -105,5 +97,4 @@ before "deploy:symlink", "JuntoDeploy:LinkCurrentSharedFolders"
 before "deploy:symlink", "JuntoDeploy:SetLocalConfiguration"
 before "deploy:symlink", "deploy:backup"
 after "JuntoDeploy:SetLocalConfiguration", "JuntoDeploy:RunDbMigrations"
-after "deploy:symlink", "JuntoDeploy:SetupHostGatorReSellerSymlink"
 after "deploy:symlink", "deploy:cleanup"
