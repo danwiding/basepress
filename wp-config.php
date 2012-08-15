@@ -28,14 +28,15 @@ $templateDirectory = dirname($path);
 
 require_once($path . '/junto-common/junto-loader.php');
 
-junto_loader::LoadConfiguration();
+
 
 require_once($templateDirectory . '/config/wordpress-app/wp-config-app.php');
 if(defined('AUTOMATED_TESTING') && AUTOMATED_TESTING =='On')
     require_once($templateDirectory . '/config/wordpress-app/wp-config-phpunit-test.php');
 else
     require_once($templateDirectory . '/config/wordpress-app/wp-config-local.php');
-SensitiveConfigLoader($templateDirectory . "/config/sensitive/wp-sensitive-local.json");
+
+junto_loader::LoadConfiguration();
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
