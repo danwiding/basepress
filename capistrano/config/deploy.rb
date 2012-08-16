@@ -1,5 +1,11 @@
 set :stages, %w(production staging)
 
+Dir.glob('config/deploy/*.rb').each do |stageFile|
+    if !stages.include?(File.basename(stageFile, File.extname(stageFile)))
+        stages.push(File.basename(stageFile, File.extname(stageFile)))
+    end
+end
+
 stages.each do |stage|
 
 	if !FileTest.exists?("config/deploy/deploy-sensitive-#{stage}.bf")
