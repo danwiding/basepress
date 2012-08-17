@@ -162,6 +162,7 @@ class ThemeMvcClassLoader{
                 require ($this->filePath . $this->classToPathArray[$className]);
             return true;
         }
+
         $requirePath = $this->filePath;
         if(stristr($className, "controller"))
             $requirePath.="/__controllers";
@@ -178,6 +179,10 @@ class ThemeMvcClassLoader{
         $requirePath.= "/{$className}.php";
         if(file_exists($requirePath)){
             require $requirePath;
+            return true;
+        }
+        if(file_exists($this->filePath . "/__models/pog-objects/{$className}.php")){
+            require $this->filePath . "/__models/pog-objects/{$className}.php";
             return true;
         }
         $files = glob("{$this->filePath}/*/{$className}.php");
