@@ -177,20 +177,24 @@ class ThemeMvcClassLoader{
         if(strcasecmp(substr($className,0,4), 'mock')==0)
             $requirePath.="/mockobjects";
         $requirePath.= "/{$className}.php";
-        if(file_exists($requirePath)){
-            require $requirePath;
-            return true;
-        }
         if(file_exists($this->filePath . "/__models/pog-objects/{$className}.php")){
             require $this->filePath . "/__models/pog-objects/{$className}.php";
             return true;
         }
+        if(file_exists($requirePath)){
+            require $requirePath;
+            return true;
+        }
+        if($className=='VendorModel')
+            print_r($requirePath);
+
         $files = glob("{$this->filePath}/*/{$className}.php");
         foreach($files as $file){
             require $file;
             if (next($files)===false)
                 return true;
         }
+
 
         return false;
     }
