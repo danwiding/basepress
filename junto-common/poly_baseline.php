@@ -2,6 +2,13 @@
 
 	include_once(JUNTO_COMMON_PATH . '/junto-misc-functions/cachedWPNavMenu.php');			// Cached WP Navigation Functions
 
+//**********     Include View File     **********//
+
+	function views($include, $once = false){
+		$uri = POLY_THEME_PATH.'/'.get_option('template');
+		return ($once ? include_once($uri.'/__views/'.$include) : include($uri.'/__views/'.$include));
+	}
+
 //**********     Force SSL     **********//
 
 	function force_ssl(){
