@@ -33,4 +33,9 @@ class JuntoUtilities
             }
         }
     }
+
+    public static function LogException(Exception $e){
+        if(!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING!=='On')
+            error_log("{$e->getMessage()} \r\n{$e->getTraceAsString()}");
+    }
 }
