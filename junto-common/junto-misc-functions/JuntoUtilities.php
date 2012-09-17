@@ -20,7 +20,7 @@ class JuntoUtilities
         echo '</pre>';
     }
 
-    public static function force_ssl(){
+    public static function force_ssl($authRedirect=False){
         if (!is_ssl() && defined('VIA_ENVIRONMENT') && (VIA_ENVIRONMENT == 'prod' || (defined('FORCE_SSL_LOGIN')&&FORCE_SSL_LOGIN==true))){
             if (0 === strpos($_SERVER['REQUEST_URI'], 'http')){
                 wp_redirect(preg_replace('|^http://|', 'https://', $_SERVER['REQUEST_URI']));
@@ -29,8 +29,15 @@ class JuntoUtilities
             else{
                 wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
                 exit();
-
             }
         }
+        if($authRedirect && !is_user_logged_in()){
+            auth_redirect();
+        }
+    }
+
+    public static function LogException(Exception $e){
+        if(!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING!=='On')
+            error_log("{$e->getMessage()} \r\n{$e->getTraceAsString()}");
     }
 }
