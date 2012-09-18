@@ -24,12 +24,14 @@ $configuration['setup_password'] = '';
 $configuration['db_encoding'] = 0;
 
 // edit the information below to match your database settings
+$matchArray=array();
+$error=preg_match('/([^:]+):?([^:]*)/',DB_HOST,$matchArray);
 
 $configuration['db']	= DB_NAME;		//	<- database name
-$configuration['host'] 	= DB_HOST;	//	<- database host
+$configuration['host'] 	= !$error ? $matchArray[0] : DB_HOST;	//	<- database host
 $configuration['user'] 	= DB_USER;		//	<- database user
 $configuration['pass']	= DB_PASSWORD;		//	<- database password
-$configuration['port']	= '3306';		//	<- database port
+$configuration['port']	= (!$error && count($matchArray)>1) ? $matchArray[1] : '3306';
 
 
 //proxy settings - if you are behnd a proxy, change the settings below
