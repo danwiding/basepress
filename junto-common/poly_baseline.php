@@ -23,6 +23,18 @@
 		}
 	}
 
+	function unforce_ssl(){
+		if (is_ssl() && defined('VIA_ENVIRONMENT') && VIA_ENVIRONMENT == 'prod'){
+			if (0 === strpos($_SERVER['REQUEST_URI'], 'https')):
+				wp_redirect(preg_replace('|^https://|', 'http://', $_SERVER['REQUEST_URI']));
+				exit();
+			else:
+				wp_redirect('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+				exit();
+			endif;
+		}
+	}
+
 //**********     Print Nice / Krumo     **********//
 
 	include_once('junto-content/krumo/class.krumo.php');
