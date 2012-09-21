@@ -124,7 +124,7 @@ abstract class POG_Base
 		return $pog_object;
 	}
 
-	public function GetAttributes($object, $type='')
+	public static function GetAttributes($object, $type='')
 	{
 		$columns = array();
 		foreach ($object->pog_attribute_type as $att => $properties)
