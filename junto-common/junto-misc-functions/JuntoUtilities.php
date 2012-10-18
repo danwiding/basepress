@@ -36,8 +36,14 @@ class JuntoUtilities
         }
     }
 
-    public static function LogException(Exception $e){
-        if(!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING!=='On')
-            error_log("{$e->getMessage()} \r\n{$e->getTraceAsString()}");
+    public static function LogException($e){
+        if(!defined('AUTOMATED_TESTING') || AUTOMATED_TESTING!=='On'){
+            if(is_a($e,'Exception')){
+                error_log("{$e->getMessage()} \r\n{$e->getTraceAsString()}");
+            }
+            else if(is_a($e,'WP_Error')){
+                error_log(print_r($e->get_error_messages(),true));
+            }
+        }
     }
 }
