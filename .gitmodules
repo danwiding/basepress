@@ -7,10 +7,6 @@
 [submodule "lib/facebook-php-sdk"]
 	path = lib/facebook-php-sdk
 	url = git@github.com:PolymathicMedia/facebook-php-sdk.git
-
 [submodule "tools/mysql-php-migrations"]
 	path = tools/mysql-php-migrations
 	url = git@github.com:PolymathicMedia/mysql-php-migrations.git
-[submodule "junto-common/junto-content/NHP-theme-options"]
-	path = junto-common/junto-content/NHP-theme-options
-	url = https://github.com/PolymathicMedia/NHP-Theme-Options-Framework.git
