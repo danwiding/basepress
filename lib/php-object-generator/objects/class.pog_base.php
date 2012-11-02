@@ -287,15 +287,35 @@ abstract class POG_Base
         return $pog_object;
     }
 
-    //more than 1 layer of tables
-
 
     /**
-     * Returns a sorted array of objects that match given conditions
-     * @param multidimensional array {("field", "comparator", "value"), ("field", "comparator", "value"), ...}
+     * Returns a sorted array of objects that match given conditions keyed by the object Id
+     * @param array $fcv_array
      * @param string $sortBy
      * @param boolean $ascending
-     * @param int limit
+     * @param int|string $limit
+     * @param multidimensional array {("field", "comparator", "value"), ("field", "comparator", "value"), ...}
+     * @throws exception
+     * @return array $buyerList
+     */
+    public function GetIdKeyedArrayInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='', $depthLimit=-1){
+        $objectList = $this->GetListInDepth($fcv_array,$sortBy,$ascending,$limit,$depthLimit);
+        $returnArray=array();
+        foreach($objectList as $pogObject){
+            $returnArray[$pogObject->GetId()]=$pogObject;
+        }
+        return $returnArray;
+    }
+
+    //more than 1 layer of tables
+    /**
+     * Returns a sorted array of objects that match given conditions
+     * @param array $fcv_array
+     * @param string $sortBy
+     * @param boolean $ascending
+     * @param int|string $limit
+     * @param multidimensional array {("field", "comparator", "value"), ("field", "comparator", "value"), ...}
+     * @throws exception
      * @return array $buyerList
      */
     public function GetListInDepth($fcv_array = array(), $sortBy='', $ascending=true, $limit='', $depthLimit=-1)

@@ -23,6 +23,17 @@
 
 //set_exception_handler('exception_handler');
 
+function SetDefaultEnvironmentConfiguration($configurationKey, $configurationDefaultValue){
+    if(!defined($configurationKey)){
+        if(array_key_exists($configurationKey,$_SERVER))
+            define($configurationKey,$_SERVER[$configurationKey]);
+        else{
+            define($configurationKey, $configurationDefaultValue);
+            $_SERVER[$configurationKey]=$configurationDefaultValue;
+        }
+    }
+}
+
 $path = dirname(__FILE__);
 $templateDirectory = dirname($path);
 
