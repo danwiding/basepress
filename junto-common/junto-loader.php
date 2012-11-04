@@ -176,6 +176,8 @@ class ThemeMvcClassLoader{
         	$requirePath.="/__helpers";
         if(strcasecmp(substr($className,0,4), 'mock')==0)
             $requirePath.="/mockobjects";
+        if(stristr($className, "interface"))
+            $requirePath.="/interfaces";
         $requirePath.= "/{$className}.php";
         if(file_exists($this->filePath . "/__models/pog-objects/{$className}.php")){
             require $this->filePath . "/__models/pog-objects/{$className}.php";
@@ -185,8 +187,8 @@ class ThemeMvcClassLoader{
             require $requirePath;
             return true;
         }
-        if($className=='VendorModel')
-            print_r($requirePath);
+//        if($className=='VendorModel')
+//            print_r($requirePath);
 
         $files = glob("{$this->filePath}/*/{$className}.php");
         foreach($files as $file){
