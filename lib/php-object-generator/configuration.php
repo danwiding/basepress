@@ -2,7 +2,7 @@
 
 define('JUNTO_BASE_FOR_POG', dirname(dirname(dirname(dirname(__FILE__)))));
 require_once(JUNTO_BASE_FOR_POG . '/config/wordpress-app/wp-config-local.php');
-require_once(JUNTO_BASE_FOR_POG . '/juntobasepress/junto-common/sensitive-config-loader.php');
+require_once(JUNTO_BASE_FOR_POG . '/basepress/junto-common/sensitive-config-loader.php');
 SensitiveConfigLoader(JUNTO_BASE_FOR_POG . '/config/sensitive/wp-sensitive-local.json');
 
 //IMPORTANT:
@@ -42,7 +42,7 @@ $configuration['proxy_password'] = false;
 
 
 //plugin settings
-$configuration['plugins_path'] = JUNTO_BASE_FOR_POG . '/juntobasepress/lib/php-object-generator/plugins';  //absolute path to plugins folder, e.g c:/mycode/test/plugins or /home/phpobj/public_html/plugins
+$configuration['plugins_path'] = JUNTO_BASE_FOR_POG . '/basepress/lib/php-object-generator/plugins';  //absolute path to plugins folder, e.g c:/mycode/test/plugins or /home/phpobj/public_html/plugins
 
 
 ?>

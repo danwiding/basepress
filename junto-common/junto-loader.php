@@ -17,11 +17,11 @@ class junto_loader{
         if(!defined('REPO_PATH'))
             define('REPO_PATH', $repositoryRootPath  );
         if(!defined('LIB_PATH'))
-            define('LIB_PATH', $repositoryRootPath . '/juntobasepress/lib');
+            define('LIB_PATH', $repositoryRootPath . '/basepress/lib');
         if(!defined('JUNTO_COMMON_PATH'))
-            define('JUNTO_COMMON_PATH', $repositoryRootPath . '/juntobasepress/junto-common');
+            define('JUNTO_COMMON_PATH', $repositoryRootPath . '/basepress/junto-common');
         if(!defined('ERRLOG_PATH'))
-            define('ERRLOG_PATH', $repositoryRootPath . '/juntobasepress/error_log.log');
+            define('ERRLOG_PATH', $repositoryRootPath . '/basepress/error_log.log');
         if(!defined('POLY_THEME_PATH'))
             define('POLY_THEME_PATH', $repositoryRootPath . '/themes');
         require_once(JUNTO_COMMON_PATH . '/junto_exception_handler.php');

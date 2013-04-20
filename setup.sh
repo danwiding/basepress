@@ -1,18 +1,18 @@
 #!/bin/sh
 THEMEDIR="$( cd "$( dirname "$0" )" && cd ".." && pwd )"
 
-rm ${THEMEDIR}/juntobasepress/wordpress/wp-content/plugins
-rm ${THEMEDIR}/juntobasepress/wordpress/wp-content/themes
-rm ${THEMEDIR}/juntobasepress/wordpress/wp-content/junto-content
+rm ${THEMEDIR}/basepress/wordpress/wp-content/plugins
+rm ${THEMEDIR}/basepress/wordpress/wp-content/themes
+rm ${THEMEDIR}/basepress/wordpress/wp-content/junto-content
 
-ln -nfs ${THEMEDIR}/plugins ${THEMEDIR}/juntobasepress/wordpress/wp-content/plugins
-ln -nfs ${THEMEDIR}/themes ${THEMEDIR}/juntobasepress/wordpress/wp-content/themes
-ln -nfs ${THEMEDIR}/juntobasepress/junto-common/junto-content ${THEMEDIR}/juntobasepress/wordpress/wp-content/junto-content
+ln -nfs ${THEMEDIR}/plugins ${THEMEDIR}/basepress/wordpress/wp-content/plugins
+ln -nfs ${THEMEDIR}/themes ${THEMEDIR}/basepress/wordpress/wp-content/themes
+ln -nfs ${THEMEDIR}/basepress/junto-common/junto-content ${THEMEDIR}/basepress/wordpress/wp-content/junto-content
 
-mkdir ${THEMEDIR}/juntobasepress/wordpress/wp-content/blogs.dir
-mkdir ${THEMEDIR}/juntobasepress/wordpress/wp-content/uploads
+mkdir ${THEMEDIR}/basepress/wordpress/wp-content/blogs.dir
+mkdir ${THEMEDIR}/basepress/wordpress/wp-content/uploads
 
-find ${THEMEDIR}/juntobasepress/lib/php-object-generator/objects -maxdepth 1 -type l -exec unlink {} \;
+find ${THEMEDIR}/basepress/lib/php-object-generator/objects -maxdepth 1 -type l -exec unlink {} \;
 
 
 if [ -d "$DIRECTORY" ]; then
@@ -30,7 +30,7 @@ for themedirectory in ${THEMEDIR}/themes/*
 do
     for pogobject in ${themedirectory}/__models/pog-objects/*.php
     do
-        ln -nfs ${pogobject} ${THEMEDIR}/juntobasepress/lib/php-object-generator/objects/$(basename ${pogobject})
+        ln -nfs ${pogobject} ${THEMEDIR}/basepress/lib/php-object-generator/objects/$(basename ${pogobject})
     done;
 done;
 

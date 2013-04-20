@@ -41,7 +41,7 @@ define('WP_USER_EMAIL', rand_str().'@example.com');
 //drop_tables();
 
 //run db migrations
-define('MPM_PATH', REPO_PATH . '/juntobasepress/tools/mysql-php-migrations');
+define('MPM_PATH', REPO_PATH . '/basepress/tools/mysql-php-migrations');
 define('MPM_VERSION', '2.1.4');
 require_once(MPM_PATH . '/lib/init.php');
 $GLOBALS['db_config']=$db_config;

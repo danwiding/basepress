@@ -56,24 +56,24 @@ namespace :JuntoDeploy do
     end
 
     task :LinkCurrentSharedFolders, :roles => :app do
-        run "ln -nfs #{shared_path}/uploads #{release_path}/juntobasepress/wordpress/wp-content/uploads"
-        run "ln -nfs #{shared_path}/blogs.dir #{release_path}/juntobasepress/wordpress/wp-content/blogs.dir"
+        run "ln -nfs #{shared_path}/uploads #{release_path}/basepress/wordpress/wp-content/uploads"
+        run "ln -nfs #{shared_path}/blogs.dir #{release_path}/basepress/wordpress/wp-content/blogs.dir"
         run "chmod -R 777 #{release_path}"
-        run "ln -nfs #{release_path}/plugins #{release_path}/juntobasepress/wordpress/wp-content/plugins"
-        run "ln -nfs #{release_path}/themes #{release_path}/juntobasepress/wordpress/wp-content/themes"
-        run "ln -nfs #{release_path}/juntobasepress/junto-common/junto-content #{release_path}/juntobasepress/wordpress/wp-content/junto-content"
+        run "ln -nfs #{release_path}/plugins #{release_path}/basepress/wordpress/wp-content/plugins"
+        run "ln -nfs #{release_path}/themes #{release_path}/basepress/wordpress/wp-content/themes"
+        run "ln -nfs #{release_path}/basepress/junto-common/junto-content #{release_path}/basepress/wordpress/wp-content/junto-content"
     end
 
     task :SetLocalConfiguration, :roles => :app do
         run "mkdir -p #{release_path}/config/sensitive/"
         run "lftp -u '#{ftp_username}','#{ftp_password}' -e \"cd /remoteftp/junto/projects/#{application}/sensitiveconfig; get wp-sensitive-#{stage}.json -o #{release_path}/config/sensitive/wp-sensitive-local.json; quit\" '#{ftp_server}'"
         run "cp #{release_path}/config/wordpress-app/wp-config-#{stage}.php #{release_path}/config/wordpress-app/wp-config-local.php"
-        run "cp #{release_path}/config/htaccess/.htaccess-#{stage} #{release_path}/juntobasepress/wordpress/.htaccess"
-        run "cp #{release_path}/juntobasepress/external-configs/php-config/php.ini-#{stage} #{release_path}/juntobasepress/wordpress/php.ini"
+        run "cp #{release_path}/config/htaccess/.htaccess-#{stage} #{release_path}/basepress/wordpress/.htaccess"
+        run "cp #{release_path}/basepress/external-configs/php-config/php.ini-#{stage} #{release_path}/basepress/wordpress/php.ini"
     end
 
     task :RunDbMigrations, :roles => :app do
-        run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php latest"
+        run "php #{release_path}/basepress/tools/mysql-php-migrations/migrate.php latest"
     end
 end
 
@@ -91,7 +91,7 @@ namespace(:deploy) do
         setup
         update_code
         symlink
-        run "php #{release_path}/juntobasepress/tools/mysql-php-migrations/migrate.php build --force"
+        run "php #{release_path}/basepress/tools/mysql-php-migrations/migrate.php build --force"
     end
 end
 
