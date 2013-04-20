@@ -1,12 +1,3 @@
-[submodule "lib/samurai-client-php"]
-	path = lib/samurai-client-php
-	url = git@github.com:PolymathicMedia/samurai-client-php.git
-[submodule "lib/oauth2"]
-	path = lib/oauth2
-	url = git@github.com:PolymathicMedia/PHP-OAuth2.git
-[submodule "lib/facebook-php-sdk"]
-	path = lib/facebook-php-sdk
-	url = git@github.com:PolymathicMedia/facebook-php-sdk.git
 [submodule "tools/mysql-php-migrations"]
 	path = tools/mysql-php-migrations
-	url = git@github.com:PolymathicMedia/mysql-php-migrations.git
+	url = git@github.com:danwiding/mysql-php-migrations.git
