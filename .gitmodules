@@ -1,3 +1,6 @@
 [submodule "tools/mysql-php-migrations"]
 	path = tools/mysql-php-migrations
 	url = git@github.com:danwiding/mysql-php-migrations.git
+[submodule "lib/stripe-php"]
+	path = lib/stripe-php
+	url = git://github.com/stripe/stripe-php.git
