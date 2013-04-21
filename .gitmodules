@@ -3,4 +3,4 @@
 	url = git@github.com:danwiding/mysql-php-migrations.git
 [submodule "lib/stripe-php"]
 	path = lib/stripe-php
-	url = git://github.com/stripe/stripe-php.git
+	url = git@github.com:danwiding/stripe-php.git
